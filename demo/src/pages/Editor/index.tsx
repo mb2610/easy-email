@@ -74,9 +74,6 @@ const defaultCategories: ExtensionProps['categories'] = [
         type: AdvancedType.BUTTON,
       },
       {
-        type: AdvancedType.SOCIAL,
-      },
-      {
         type: AdvancedType.DIVIDER,
       },
       {
@@ -87,6 +84,27 @@ const defaultCategories: ExtensionProps['categories'] = [
       },
       {
         type: AdvancedType.WRAPPER,
+      },
+      {
+        type: AdvancedType.SOCIAL,
+      },
+      {
+        type: AdvancedType.NAVBAR,
+      },
+      {
+        type: AdvancedType.ACCORDION,
+      },
+      {
+        type: AdvancedType.CAROUSEL,
+      },
+      {
+        type: AdvancedType.SECTION,
+      },
+      {
+        type: AdvancedType.COLUMN,
+      },
+      {
+        type: AdvancedType.GROUP,
       },
     ],
   },
