@@ -1,9 +1,6 @@
-import { Card, ConfigProvider, Layout, Message, Tabs } from '@arco-design/web-react';
 import { useEditorProps, useFocusIdx } from 'easy-email-editor';
 import React, { useEffect } from 'react';
 import { InteractivePrompt } from '../InteractivePrompt';
-import styles from './index.module.scss';
-import enUS from '@arco-design/web-react/es/locale/en-US';
 import { MergeTagBadgePrompt } from '@extensions/MergeTagBadgePrompt';
 import { EditPanel } from '../EditPanel';
 import { ConfigurationPanel } from '@extensions/ConfigurationPanel';
@@ -12,6 +9,7 @@ import {
   ExtensionProvider,
 } from '@extensions/components/Providers/ExtensionProvider';
 import { AdvancedType } from 'easy-email-core';
+import { Box, Stack } from '@mui/material'
 
 const defaultCategories: ExtensionProps['categories'] = [
   {
@@ -43,6 +41,12 @@ const defaultCategories: ExtensionProps['categories'] = [
       {
         type: AdvancedType.WRAPPER,
       },
+      {
+        type: AdvancedType.NAVBAR,
+      },
+      {
+        type: AdvancedType.CAROUSEL,
+      }
     ],
   },
   {
@@ -93,49 +97,42 @@ export const StandardLayout: React.FC<ExtensionProps> = props => {
       {...props}
       categories={categories}
     >
-      <ConfigProvider locale={enUS}>
-        <Card
-          style={{ padding: 0 }}
-          bodyStyle={{
-            padding: 0,
-            height: containerHeight,
+      <Stack
+        direction='row'
+        spacing={0}
+        className='StandardLayout'
+        sx={{
+            width: '100vw',
             overflow: 'hidden',
           }}
-        >
-          <Layout
-            className={styles.StandardLayout}
-            style={{
-              display: 'flex',
-              width: '100vw',
-              overflow: 'hidden',
-            }}
-          >
-            {compact && <EditPanel />}
-            <Layout style={{ height: containerHeight, flex: 1 }}>{props.children}</Layout>
-            {!compact && <EditPanel />}
-            {compact ? (
-              <Layout.Sider
-                style={{
-                  height: containerHeight,
-                  minWidth: 300,
-                  maxWidth: 350,
-                  width: 350,
-                }}
-              >
-                <ConfigurationPanel
-                  compact={compact}
-                  height={containerHeight}
-                  showSourceCode={showSourceCode}
-                />
-              </Layout.Sider>
-            ) : (
-              <Layout.Sider style={{ width: 0, overflow: 'hidden' }} />
-            )}
-          </Layout>
-        </Card>
-        <InteractivePrompt />
-        <MergeTagBadgePrompt />
-      </ConfigProvider>
+      >
+
+          {compact && <EditPanel />}
+
+          <Box sx={{ height: containerHeight, flex: 1 }}>{props.children}</Box>
+
+          {!compact && <EditPanel />}
+
+          {compact && (
+            <Box
+              sx={{
+                height: containerHeight,
+                minWidth: 300,
+                maxWidth: 350,
+                width: 350,
+                border: 1
+              }}
+            >
+              <ConfigurationPanel
+                compact={compact}
+                height={containerHeight}
+                showSourceCode={showSourceCode}
+              />
+            </Box>
+          )}
+      </Stack>
+      <InteractivePrompt />
+      <MergeTagBadgePrompt />
     </ExtensionProvider>
   );
 };

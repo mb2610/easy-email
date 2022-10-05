@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Tabs } from '@arco-design/web-react';
+import React, { useEffect } from 'react';
 import { AttributePanel } from '@extensions/AttributePanel';
 import { SourceCodePanel } from '@extensions/SourceCodePanel';
 import { FullHeightOverlayScrollbars } from '@extensions/components/FullHeightOverlayScrollbars';
-import { IconLeft } from '@arco-design/web-react/icon';
-import styles from './index.module.scss';
+import { ChevronLeft } from '@mui/icons-material'
+import { Box, List, ListItem, ListSubheader, IconButton, Tab } from '@mui/material'
+import { TabContext, TabList, TabPanel } from "@mui/lab"
+
 export interface ConfigurationPanelProps {
   showSourceCode: boolean;
   height: string;
@@ -18,74 +19,57 @@ export function ConfigurationPanel({
   onBack,
   compact,
 }: ConfigurationPanelProps) {
-  const [inited, setInited] = useState(false);
+  const [value, setValue] = React.useState<string>();
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
-    // Tabs 在 drawer 里面有bug
     let timer = setTimeout(() => {
-      setInited(true);
+      setValue('1');
     }, 100);
     return () => {
       clearTimeout(timer);
     };
   }, []);
 
-  if (!inited) return null;
+  if (!value) return null;
 
   return (
     <>
-      {showSourceCode ? (
-        <Tabs
-          className={styles.tabs}
-          renderTabHeader={(_, DefaultHeader) =>
-            !compact ? (
-              <div
-                className={styles.largeTabsHeader}
-                style={{ display: 'flex', alignItems: 'center' }}
-              >
-                <div
-                  style={{ padding: 10, cursor: 'pointer' }}
-                  onClick={onBack}
-                >
-                  <IconLeft fontSize={16} />
-                </div>
+    {showSourceCode ? (
+      <List
+        sx={{ width: '100%'}}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        subheader={!compact && <ListSubheader component="div" id="nested-list-subheader">
+          <IconButton onClick={onBack}>
+            <ChevronLeft />
+          </IconButton>
+        </ListSubheader>}
+      >
+        <ListItem>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList onChange={handleChange} aria-label="Configurator Panel">
+                <Tab label="Configuration" value="1" />
+                <Tab label="Source code" value="2" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
+                  <AttributePanel />
+                </FullHeightOverlayScrollbars>
+            </TabPanel>
+            <TabPanel value="2">
+              <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
+                  <SourceCodePanel />
+                </FullHeightOverlayScrollbars>
+            </TabPanel>
+          </TabContext>
+        </ListItem>
+      </List>
 
-                <DefaultHeader style={{ flex: 1 }} />
-              </div>
-            ) : (
-              <div
-                className={styles.largeTabsHeader}
-                style={{ display: 'flex', alignItems: 'center' }}
-              >
-                <DefaultHeader style={{ flex: 1 }} />
-              </div>
-            )
-          }
-        >
-          <Tabs.TabPane
-            title={
-              <div style={{ height: 40, lineHeight: '40px' }}>
-                Configuration
-              </div>
-            }
-          >
-            <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
-              <AttributePanel />
-            </FullHeightOverlayScrollbars>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane
-            destroyOnHide
-            key='Source code'
-            title={
-              <div style={{ height: 40, lineHeight: '40px' }}>Source code</div>
-            }
-          >
-            <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
-              <SourceCodePanel />
-            </FullHeightOverlayScrollbars>
-          </Tabs.TabPane>
-        </Tabs>
       ) : (
         <AttributePanel />
       )}

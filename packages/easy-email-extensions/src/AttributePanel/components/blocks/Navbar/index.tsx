@@ -3,60 +3,88 @@ import {
   ColorPickerField,
   EditTabField,
   SelectField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
-import { IconLink } from '@arco-design/web-react/icon';
 import { NavbarLinkPadding } from '@extensions/AttributePanel/components/attributes/NavbarLinkPadding';
-import { useFocusIdx, Stack } from 'easy-email-editor';
+import { useFocusIdx } from 'easy-email-editor';
 import { INavbar } from 'easy-email-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
-import { FontFamily, FontStyle, FontWeight, LetterSpacing, LineHeight, TextAlign, TextDecoration, TextTransform } from '../../attributes';
+import { FontFamily, FontStyle, FontWeight, LetterSpacing, LineHeight, TextDecoration, TextTransform } from '../../attributes';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, InputAdornment } from '@mui/material';
+import { ExpandMore, Link } from "@mui/icons-material";
+
 
 export function Navbar() {
   const { focusIdx } = useFocusIdx();
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Layout'>
-          <Stack vertical spacing='tight'>
-            <Align />
-          </Stack>
-        </Collapse.Item>
+      <CollapseWrapper>
 
-        <Collapse.Item
-          contentStyle={{ padding: 0 }}
-          name='1'
-          header='Navbar links'
-        >
-          <Space direction='vertical' style={{ width: '100%' }}>
-            <EditTabField
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="layout-content"
+            id="layout-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Layout</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Align />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="nav-content"
+            id="nav-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Navbar links</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <EditTabField
               tabPosition='top'
               name={`${focusIdx}.data.value.links`}
               label='Links'
               labelHidden
-              renderItem={(item, index) => (
+              renderItem={(item: any, index: number) => (
                 <NavbarLink item={item} index={index} />
               )}
               additionItem={{
-                src: 'https://www.mailjet.com/wp-content/uploads/2016/11/ecommerce-guide.jpg',
+                src: 'http://www.site.com',
                 target: '_blank',
                 content: 'New link',
                 color: '#1890ff',
                 'font-size': '13px',
               }}
             />
-            <div />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );
@@ -72,72 +100,78 @@ function NavbarLink({
   const { focusIdx } = useFocusIdx();
   return (
     <div className='NavbarLink'>
-      <Space direction='vertical' style={{ width: '100%' }}>
+      <Grid direction='column' style={{ width: '100%' }}>
 
-        <Grid.Row>
-          <Grid.Col span={11}>
-            <TextField
+        <Grid>
+          <Grid item>
+            <InputField
               label='Content'
               name={`${focusIdx}.data.value.links.[${index}].content`}
             />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
+          </Grid>
+          <Grid item>
             <ColorPickerField
               label='Color'
               name={`${focusIdx}.data.value.links.[${index}].color`}
               alignment='center'
             />
-          </Grid.Col>
-        </Grid.Row>
+          </Grid>
+        </Grid>
 
-        <Grid.Row>
-          <Grid.Col span={11}>
+        <Grid>
+          <Grid item>
 
             <FontFamily name={`${focusIdx}.data.value.links.[${index}].font-family`} />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
-            <TextField
+          </Grid>
+          <Grid item>
+            <InputField
               label='Font size'
               quickchange
               name={`${focusIdx}.data.value.links.[${index}].font-size`}
             />
-          </Grid.Col>
-        </Grid.Row>
+          </Grid>
+        </Grid>
 
-        <Grid.Row>
-          <Grid.Col span={11}>
+        <Grid>
+          <Grid item>
             <LineHeight name={`${focusIdx}.data.value.links.[${index}].line-height`} />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
+          </Grid>
+          <Grid item>
             <LetterSpacing name={`${focusIdx}.data.value.links.[${index}].letter-spacing`} />
-          </Grid.Col>
-        </Grid.Row>
+          </Grid>
+        </Grid>
 
-        <Grid.Row>
-          <Grid.Col span={11}>
+        <Grid>
+          <Grid item>
             <TextDecoration name={`${focusIdx}.data.value.links.[${index}].text-decoration`} />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
+          </Grid>
+          <Grid item>
             <FontWeight name={`${focusIdx}.data.value.links.[${index}].font-weight`} />
-          </Grid.Col>
-        </Grid.Row>
+          </Grid>
+        </Grid>
 
-        <Grid.Row>
-          <Grid.Col span={11}>
+        <Grid>
+          <Grid item>
             <TextTransform name={`${focusIdx}.data.value.links.[${index}].text-transform`} />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11} />
-        </Grid.Row>
+          </Grid>
+          <Grid item />
+        </Grid>
         <FontStyle name={`${focusIdx}.data.value.links.[${index}].font-style`} />
-        <Grid.Row>
-          <Grid.Col span={11}>
-            <TextField
-              prefix={<IconLink />}
+        <Grid>
+          <Grid item>
+            <InputField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Link />
+                  </InputAdornment>
+                ),
+              }}
               label={<span>Url</span>}
               name={`${focusIdx}.data.value.links.[${index}].href`}
             />
-          </Grid.Col>
-          <Grid.Col offset={1} span={11}>
+          </Grid>
+          <Grid item>
             <SelectField
               style={{ minWidth: 65 }}
               label='Target'
@@ -153,14 +187,14 @@ function NavbarLink({
                 },
               ]}
             />
-          </Grid.Col>
-        </Grid.Row>
+          </Grid>
+        </Grid>
         <NavbarLinkPadding
           key={index}
           name={`${focusIdx}.data.value.links.[${index}].padding`}
         />
         <div />
-      </Space>
+      </Grid>
     </div>
   );
 }

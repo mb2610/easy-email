@@ -1,10 +1,10 @@
 import { useBlock, useFocusIdx } from 'easy-email-editor';
 import { AdvancedBlock, OperatorSymbol, AdvancedType, Operator, ICondition, IConditionGroup } from 'easy-email-core';
-import { Collapse, Grid, Switch, Button, Space, List, Message } from '@arco-design/web-react';
-import { SelectField, TextField } from '@extensions/components/Form';
+import { SelectField, InputField } from '@extensions/components/Form';
 import React, { useCallback } from 'react';
 import { cloneDeep, get, upperFirst } from 'lodash';
-import { IconDelete, IconPlus } from '@arco-design/web-react/icon';
+import { Delete, Add, ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, Switch, IconButton, List, ListItem, Divider } from '@mui/material';
 import { useField } from 'react-final-form';
 
 export function Condition() {
@@ -81,7 +81,7 @@ export function Condition() {
     subGroups.splice(ggIndex, 1);
     if (subGroups.length === 0) {
       if (groups.length === 1) {
-        Message.warning('At least one condition');
+        console.error('At least one condition');
         return;
       }
       // remove empty array
@@ -103,103 +103,82 @@ export function Condition() {
   const isEmpty = !condition?.groups.length;
 
   return (
-    <Collapse.Item
-      contentStyle={{
-        paddingLeft: 10
-      }}
-      className='condition'
-      destroyOnHide
-      name='Condition'
-      header='Condition'
-      extra={(
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMore />}
+        aria-controls="condition-content"
+        id="condition-header"
+        sx={{
+          backgroundColor: '#CCC'
+        }}
+      >
+        <Typography>Condition</Typography>
         <div style={{ marginRight: 10 }}>
-          <Switch checked={condition?.enabled} onChange={onConditionToggle} />
+          <Switch checked={condition?.enabled} onChange={(e) => onConditionToggle(e.target.checked)} />
         </div>
-      )}
-    >
-
-      {condition?.enabled && (
-        <Space direction='vertical' size='large'>
-
-          <List
-            header={(
-              <Grid.Row justify='space-between'>
-                <Grid.Col span={16}>
-                  {condition.groups.length > 1 && (
-                    <SelectField inline name={`${focusIdx}.data.value.condition.symbol`}
-                      label="Symbol"
-                      options={[
-                        {
-                          label: 'And',
-                          value: OperatorSymbol.AND
-                        },
-                        {
-                          label: 'Or',
-                          value: OperatorSymbol.OR
-                        },
-                      ]}
-                    />
-                  )}
-                </Grid.Col>
-                <Button onClick={() => onAddCondition(`${focusIdx}.data.value.condition.groups`)} size='small' icon={<IconPlus />} />
-              </Grid.Row>
-            )}
-            dataSource={condition.groups}
-            render={
-              (group, gIndex) => {
-                return (
-                  <List.Item key={gIndex}>
-                    <div>
-                      <Grid.Row justify='space-between'>
-                        <Grid.Col span={16}>
-                          {
-                            group.groups.length > 1 && (
-                              <SelectField inline name={`${focusIdx}.data.value.condition.symbol`}
-                                label="Symbol"
-                                options={[
-                                  {
-                                    label: 'And',
-                                    value: OperatorSymbol.AND
-                                  },
-                                  {
-                                    label: 'Or',
-                                    value: OperatorSymbol.OR
-                                  },
-                                ]}
-                              />
-                            )
-                          }
-                        </Grid.Col>
-                        <Button size='small' icon={<IconPlus />} onClick={() => onAddSubCondition(`${focusIdx}.data.value.condition.groups.${gIndex}.groups`)} />
-                      </Grid.Row>
-                      {
-                        group.groups.map((item, ggIndex) => (
-                          <ConditionItem
-                            onDelete={onDelete}
-                            path={`${focusIdx}.data.value.condition.groups`}
-                            gIndex={gIndex}
-                            ggIndex={ggIndex}
-                            key={ggIndex}
-                          />
-                        ))
-                      }
-
-                    </div>
-                  </List.Item>
-                );
-              }
-            }
-          />
-
-        </Space>
-      )}
-    </Collapse.Item>
-  );
+      </AccordionSummary>
+      <AccordionDetails>
+        {condition?.enabled && (<>
+         <nav aria-label="main mailbox header">
+           <List>
+             <ListItem disablePadding>
+                <Grid direction='row' justifyContent='space-between'>
+                    <Grid item sm={8}>
+                      {condition.groups.length > 1 && (
+                        <SelectField inline name={`${focusIdx}.data.value.condition.symbol`}
+                          label="Symbol"
+                          options={[
+                            {
+                              label: 'And',
+                              value: OperatorSymbol.AND
+                            },
+                            {
+                              label: 'Or',
+                              value: OperatorSymbol.OR
+                            },
+                          ]}
+                        />
+                      )}
+                    </Grid>
+                    <IconButton color="secondary" aria-label="add" component="label" onClick={() => onAddCondition(`${focusIdx}.data.value.condition.groups`)}>
+                      <Add />
+                    </IconButton>
+                </Grid>
+             </ListItem>
+           </List>
+         </nav>
+         <Divider />
+         {condition.groups.map((group, gIndex) => (
+          <>
+          <Divider />
+          <nav aria-label="secondary mailbox folders">
+            <List>
+                  {group.groups.map((group, ggIndex) => (
+                    <ListItem disablePadding>
+                      <ConditionItem
+                        allowDelete={condition.groups.length > 1 || condition.groups[0].groups.length > 1}
+                        onDelete={onDelete}
+                        path={`${focusIdx}.data.value.condition.groups`}
+                        gIndex={gIndex}
+                        ggIndex={ggIndex}
+                        key={ggIndex}
+                      />
+                      </ListItem>
+                  ))}
+            </List>
+          </nav>
+          </>
+          ))}
+         </>
+        )}
+      </AccordionDetails>
+    </Accordion>
+  )
 }
 
 const options = Object.values(Operator).map(item => ({ label: upperFirst(item), value: item }));
 
-function ConditionItem({ path, onDelete, gIndex, ggIndex }: { path: string; gIndex: number; ggIndex: number; onDelete: (path: string, gIndex: number, ggIndex: number,) => void; }) {
+function ConditionItem({ path, onDelete, gIndex, ggIndex, allowDelete }: { path: string; gIndex: number; ggIndex: number; allowDelete: boolean; onDelete: (path: string, gIndex: number, ggIndex: number,) => void; }) {
 
   const name = `${path}.${gIndex}.groups.${ggIndex}`;
   const { input: { value } } = useField(name);
@@ -207,14 +186,15 @@ function ConditionItem({ path, onDelete, gIndex, ggIndex }: { path: string; gInd
   const hideRight = value.operator === Operator.TRUTHY || value.operator === Operator.FALSY;
 
   return (
-    <Grid.Row align='end'>
-      <Grid.Col span={7}> <TextField label="Variable path" name={`${name}.left`} /></Grid.Col>
-      <Grid.Col span={7}> <SelectField label="Operator" name={`${name}.operator`} options={options} /></Grid.Col>
-      <Grid.Col span={7}> {!hideRight && <TextField label="Right" name={`${name}.right`} />}</Grid.Col>
-      <Grid.Col span={3}>
-        <Button onClick={() => onDelete(path, gIndex, ggIndex)} icon={<IconDelete />} />
-      </Grid.Col>
-
-    </Grid.Row>
+    <Grid direction='row' alignContent='flex-end'>
+      <Grid item sm={3}> <InputField label="Variable path" name={`${name}.left`} /></Grid>
+      <Grid item sm={3}> <SelectField label="Operator" name={`${name}.operator`} options={options} /></Grid>
+      <Grid item sm={3}> {!hideRight && <InputField label="Right" name={`${name}.right`} />}</Grid>
+      <Grid item sm={3}>
+        <IconButton color="secondary" aria-label="add" component="label" onClick={() => onDelete(path, gIndex, ggIndex)} disabled={!allowDelete}>
+          <Delete />
+        </IconButton>
+      </Grid>
+    </Grid>
   );
 }

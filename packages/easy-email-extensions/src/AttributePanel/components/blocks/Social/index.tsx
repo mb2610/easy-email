@@ -5,11 +5,9 @@ import {
   ImageUploaderField,
   InputWithUnitField,
   RadioGroupField,
-  SelectField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
-import { IconLink } from '@arco-design/web-react/icon';
 import { Color } from '@extensions/AttributePanel/components/attributes/Color';
 import { ContainerBackgroundColor } from '@extensions/AttributePanel/components/attributes/ContainerBackgroundColor';
 import { FontFamily } from '@extensions/AttributePanel/components/attributes/FontFamily';
@@ -18,14 +16,14 @@ import { FontStyle } from '@extensions/AttributePanel/components/attributes/Font
 import { FontWeight } from '@extensions/AttributePanel/components/attributes/FontWeight';
 
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Button, Card, Collapse, Dropdown, Grid, Menu, Popover, Space, Typography } from '@arco-design/web-react';
 import { TextDecoration } from '@extensions/AttributePanel/components/attributes/TextDecoration';
 import { LineHeight } from '@extensions/AttributePanel/components/attributes/LineHeight';
-import { Stack, useBlock, useEditorProps, useFocusIdx } from 'easy-email-editor';
+import { useBlock, useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { ISocial } from 'easy-email-core';
-import { getImg } from '@extensions/AttributePanel/utils/getImg';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, InputAdornment } from '@mui/material';
+import { ExpandMore, Link } from "@mui/icons-material";
 
 const options = [
   {
@@ -46,106 +44,151 @@ export function Social() {
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2', '3']}>
-        <Collapse.Item name='1' header='Setting'>
-          <Space direction='vertical'>
-            <RadioGroupField
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="setting-content"
+            id="setting-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <RadioGroupField
               label='Mode'
               name={`${focusIdx}.attributes.mode`}
               options={options}
             />
+          </AccordionDetails>
+        </Accordion>
 
-            <Align />
 
-          </Space>
-        </Collapse.Item>
-
-        <Collapse.Item name='3' header='Typography'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Typography-content"
+            id="Typography-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Typography</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <Grid>
+              <Grid item>
                 <FontFamily />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontSize />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
+              </Grid>
+            </Grid>
+            <Grid>
+              <Grid item>
                 <FontWeight />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <LineHeight />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
+              </Grid>
+            </Grid>
+            <Grid>
+              <Grid item>
                 <Color />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
 
                 <ContainerBackgroundColor title='Background color' />
-              </Grid.Col>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Col span={11}>
+              </Grid>
+            </Grid>
+            <Grid>
+              <Grid item>
                 <TextDecoration />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontStyle />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-          </Space>
-        </Collapse.Item>
-
-        <Collapse.Item
-          name='2'
-          header='Social item'
-          contentStyle={{ padding: 10 }}
-        >
-
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="item-content"
+            id="item-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Social item</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <EditGridTabField
             tabPosition='top'
             name={`${focusIdx}.data.value.elements`}
             label=''
             labelHidden
-            renderItem={(item, index) => (
+            renderItem={(item: any, index: number) => (
               <SocialElement item={item} index={index} />
             )}
           />
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='0' header='Dimension'>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+              <Grid>
+                  <Grid>
+                  <Grid>
+                    <InputWithUnitField
+                      label='Icon width'
+                      name={`${focusIdx}.attributes.icon-size`}
+                    />
+                  </Grid>
+                  <Grid>
+                    <InputField
+                      label='Border radius'
+                      name={`${focusIdx}.attributes.border-radius`}
+                    />
+                  </Grid>
+                </Grid>
+                <Padding />
+                <Padding attributeName='inner-padding' title='Icon padding' />
+                <Padding attributeName='text-padding' title='Text padding' />
+              </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-          <Space direction="vertical" size="large">
-
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <InputWithUnitField
-                  label='Icon width'
-                  name={`${focusIdx}.attributes.icon-size`}
-                />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
-                <TextField
-                  label='Border radius'
-                  name={`${focusIdx}.attributes.border-radius`}
-                />
-              </Grid.Col>
-            </Grid.Row>
-
-            <Padding />
-            <Padding attributeName='inner-padding' title='Icon padding' />
-            <Padding attributeName='text-padding' title='Text padding' />
-          </Space>
-
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );
@@ -171,7 +214,7 @@ function SocialElement({
   }, [socialIcons]);
 
   return (
-    <Space direction='vertical'>
+    <Grid direction='column' spacing={2}>
       <ImageUploaderField
         label='Image'
         autoCompleteOptions={autoCompleteOptions}
@@ -180,38 +223,28 @@ function SocialElement({
         // helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
         uploadHandler={onUploadImage}
       />
-
-      <Grid.Row>
-        <Grid.Col span={11}>
-          <TextField
+      <Grid>
+        <Grid>
+          <InputField
             label='Content'
             name={`${focusIdx}.data.value.elements.[${index}].content`}
             quickchange
           />
-        </Grid.Col>
-        <Grid.Col offset={1} span={11}>
-          <TextField
-            prefix={<IconLink />}
+        </Grid>
+        <Grid>
+          <InputField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Link />
+                </InputAdornment>
+              ),
+            }}
             label='Link'
             name={`${focusIdx}.data.value.elements.[${index}].href`}
           />
-        </Grid.Col>
-      </Grid.Row>
-      {/* <Grid.Row>
-        <Grid.Col span={11}>
-          <InputWithUnitField
-            label='Icon width'
-            name={`${focusIdx}.data.value.elements.[${index}].icon-size`}
-          />
-        </Grid.Col>
-        <Grid.Col offset={1} span={11}>
-          <InputWithUnitField
-            label='Icon height'
-            name={`${focusIdx}.data.value.elements.[${index}].icon-height`}
-          />
-        </Grid.Col>
-      </Grid.Row> */}
-
-    </Space>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

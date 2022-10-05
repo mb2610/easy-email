@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TextField } from '../../../components/Form';
+import { InputField } from '../../../components/Form';
 import { useFocusIdx, Stack } from 'easy-email-editor';
 
 export function Height({ inline }: { inline?: boolean; }) {
@@ -9,7 +9,7 @@ export function Height({ inline }: { inline?: boolean; }) {
     return (
       <Stack wrap={false}>
         <Stack.Item fill>
-          <TextField
+          <InputField
             label='Height'
             name={`${focusIdx}.attributes.height`}
             quickchange

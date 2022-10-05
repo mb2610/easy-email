@@ -1,20 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BackgroundColor } from '@extensions/AttributePanel/components/attributes/BackgroundColor';
 import {
   ImageUploaderField,
   InputWithUnitField,
   RadioGroupField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
 import { Height } from '@extensions/AttributePanel/components/attributes/Height';
 import { VerticalAlign } from '@extensions/AttributePanel/components/attributes/VerticalAlign';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
-import { Stack, useEditorProps, useFocusIdx } from 'easy-email-editor';
+import { useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 const options = [
   {
@@ -33,29 +34,53 @@ export function Hero() {
 
   return (
     <AttributesPanelWrapper>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
             <RadioGroupField
               label='Mode'
               name={`${focusIdx}.attributes.mode`}
               options={options}
             />
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid>
                 <Width />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid>
                 <Height />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
             <Padding />
             <VerticalAlign />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='1' header='Background'>
-          <Space direction='vertical'>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="background-content"
+            id="background-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Background</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
             <ImageUploaderField
               label='src'
               name={`${focusIdx}.attributes.background-url`}
@@ -63,46 +88,58 @@ export function Hero() {
               uploadHandler={onUploadImage}
             />
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid>
                 <InputWithUnitField
                   label='Background width'
                   name={`${focusIdx}.attributes.background-width`}
                 />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid>
                 <InputWithUnitField
                   label='Background height'
                   name={`${focusIdx}.attributes.background-height`}
                 />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <TextField
+            <Grid>
+              <Grid>
+                <InputField
                   label='Background position'
                   name={`${focusIdx}.attributes.background-position`}
                 />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid>
                 <InputWithUnitField
                   label='Border radius'
                   name={`${focusIdx}.attributes.border-radius`}
                   unitOptions='percent'
                 />
-              </Grid.Col>
-              <Grid.Col span={11}>
+              </Grid>
+              <Grid>
                 <BackgroundColor />
-              </Grid.Col>
-            </Grid.Row>
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+              </Grid>
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

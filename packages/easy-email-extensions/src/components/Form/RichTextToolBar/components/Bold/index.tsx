@@ -1,11 +1,10 @@
-import { PopoverProps, Tooltip } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
 import { IconFont } from 'easy-email-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'easy-email-core';
 import { useSelectionRange } from '@extensions/AttributePanel/hooks/useSelectionRange';
 
-export interface LinkProps extends PopoverProps {
+export interface LinkProps {
   currentRange: Range | null | undefined;
   onChange: () => void;
 }
@@ -35,12 +34,6 @@ export function Bold(props: LinkProps) {
   }, [node, onChange, setRangeByElement]);
 
   return (
-    <Tooltip
-      color='#fff'
-      position='tl'
-      content="Bold"
-    >
-      <ToolItem title='Bold' isActive={Boolean(node)} icon={<IconFont iconName='icon-bold' />} onClick={onClick} />
-    </Tooltip>
+    <ToolItem title='Bold' isActive={Boolean(node)} icon={<IconFont iconName='icon-bold' />} onClick={onClick} />
   );
 }

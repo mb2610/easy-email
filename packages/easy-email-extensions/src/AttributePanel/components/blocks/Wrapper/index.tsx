@@ -1,47 +1,98 @@
 import React from 'react';
 import { Padding } from '@extensions/AttributePanel/components/attributes//Padding';
 import { Background } from '@extensions/AttributePanel/components/attributes//Background';
-import { TextField } from '@extensions/components/Form';
+import { InputField } from '@extensions/components/Form';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid } from '@arco-design/web-react';
 import { Stack, useFocusIdx } from 'easy-email-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Wrapper() {
   const { focusIdx } = useFocusIdx();
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Dimension'>
+      <CollapseWrapper>
+
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Dimension-content"
+            id="Dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack vertical spacing='tight'>
             <Padding />
           </Stack>
-        </Collapse.Item>
-        <Collapse.Item name='1' header='Background'>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Background-content"
+            id="Background-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Background</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack vertical spacing='tight'>
             <Background />
           </Stack>
-        </Collapse.Item>
-        <Collapse.Item name='2' header='Border'>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Border-content"
+            id="Border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack vertical spacing='tight'>
-            <TextField
+            <InputField
               label='Border'
               name={`${focusIdx}.attributes.border`}
               inline
             />
-            <TextField
+            <InputField
               label='Background border radius'
               name={`${focusIdx}.attributes.border-radius`}
               inline
             />
           </Stack>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

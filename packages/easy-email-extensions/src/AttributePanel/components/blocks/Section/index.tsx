@@ -4,11 +4,12 @@ import { Background } from '@extensions/AttributePanel/components/attributes/Bac
 import { Border } from '@extensions/AttributePanel/components/attributes/Border';
 import { useCallback } from 'react';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space, Switch } from '@arco-design/web-react';
-import { Stack, useBlock } from 'easy-email-editor';
+import { useBlock } from 'easy-email-editor';
 import { BasicType, BlockManager } from 'easy-email-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, Switch, FormControlLabel } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Section() {
   const { focusBlock, setFocusBlock } = useBlock();
@@ -45,46 +46,77 @@ export function Section() {
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={12}>
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={2}>
+              <Grid item>
+                  <FormControlLabel control={<Switch defaultChecked={noWrap} />} label="Group" />
+              </Grid>
+              <Grid item>
+                <Padding />
+              </Grid>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-                <label
-
-                  style={{ width: '100%', display: 'flex' }}
-                >
-
-                  <div style={{ flex: 1 }}>Group</div>
-                </label>
-
-                <Switch
-                  checked={noWrap}
-                  checkedText='True'
-                  uncheckedText='False'
-                  onChange={onChange}
-                />
-              </Grid.Col>
-              <Grid.Col span={12} />
-            </Grid.Row>
-
-            <Padding />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='1' header='Background'>
-          <Stack vertical spacing='tight'>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="background-content"
+            id="background-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Background</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <Background />
-          </Stack>
-        </Collapse.Item>
-        <Collapse.Item name='2' header='Border'>
-          <Border />
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="border-content"
+            id="border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Border />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

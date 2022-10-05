@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, useEditorProps, useFocusIdx } from 'easy-email-editor';
+import { useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { BackgroundColor } from '@extensions/AttributePanel/components/attributes/BackgroundColor';
 import { FontFamily } from '@extensions/AttributePanel/components/attributes/FontFamily';
@@ -9,11 +9,13 @@ import {
   InputWithUnitField,
   RadioGroupField,
   SelectField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion as MuiAccordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
+
 
 const positionOptions = [
   {
@@ -47,79 +49,102 @@ export function Accordion() {
 
   return (
     <AttributesPanelWrapper>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Setting'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+      <CollapseWrapper>
+        <MuiAccordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="setting-content"
+            id="setting-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+            <Grid>
+              <Grid item>
                 <BackgroundColor />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontFamily />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
             <Padding />
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <InputWithUnitField
                   label='Icon width'
                   name={`${focusIdx}.attributes.icon-width`}
                 />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <InputWithUnitField
                   label='Icon height'
                   name={`${focusIdx}.attributes.icon-height`}
                 />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <ImageUploaderField
                   label='Unwrapped icon'
                   name={`${focusIdx}.attributes.icon-unwrapped-url`}
                   // helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
                   uploadHandler={onUploadImage}
                 />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <ImageUploaderField
                   label='Wrapped icon'
                   name={`${focusIdx}.attributes.icon-wrapped-url`}
                   uploadHandler={onUploadImage}
                 />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <RadioGroupField
                   label='Icon position'
                   name={`${focusIdx}.attributes.icon-position`}
                   options={positionOptions}
                 />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <SelectField
                   style={{ width: 120 }}
                   label='Icon align'
                   name={`${focusIdx}.attributes.icon-align`}
                   options={alignOptions}
                 />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <TextField label='border' name={`${focusIdx}.attributes.border`} />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+            <InputField label='border' name={`${focusIdx}.attributes.border`} />
+            </Grid>
+          </AccordionDetails>
+        </MuiAccordion>
+
+        <MuiAccordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </MuiAccordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

@@ -1,20 +1,20 @@
 import React, { useMemo } from 'react';
-import {
-  AutoComplete as ArcoAutoComplete,
-  AutoCompleteProps as ArcoAutoCompleteProps,
-} from '@arco-design/web-react';
 import { isString } from 'lodash';
+import TextField from '@mui/material/TextField';
+import Autocomplete, {AutocompleteProps} from '@mui/material/Autocomplete';
 
-export interface AutoCompleteProps
-  extends Omit<ArcoAutoCompleteProps, 'onChange' | 'options'> {
+export interface AutoCompleteProps<T>
+  extends Omit<AutocompleteProps<T, false, false, true>, 'onChange' | 'options'> {
   quickchange?: boolean;
   value: string;
   options: Array<{ value: any; label: any }>;
   onChange: (val: string) => void;
 }
 
-export function AutoComplete(props: AutoCompleteProps) {
-  const options = useMemo(() => {
+export function AutoComplete<T>(props: AutoCompleteProps<T>) {
+  const { value, options, quickchange, onChange, ...rest} = props;
+
+  const myOptions = useMemo(() => {
     const selectedValue = (props.value || '').toLowerCase();
     return props.options
       .filter((item) => {
@@ -25,8 +25,18 @@ export function AutoComplete(props: AutoCompleteProps) {
             item.label.toLowerCase().startsWith(selectedValue))
         );
       })
-      .map((item) => ({ ...item, name: item.label }));
-  }, [props.options, props.value]);
+      .map((item) => item.label);
+  }, [options, value]);
 
-  return <ArcoAutoComplete {...props} data={options} />;
+  return (
+    <Autocomplete {...rest}
+      disablePortal
+      value={value}
+      onInputChange={(event, newInputValue) => {
+          onChange(newInputValue);
+      }}
+      options={myOptions}
+      renderInput={(params) => <TextField {...params} />}
+    />
+  )
 }

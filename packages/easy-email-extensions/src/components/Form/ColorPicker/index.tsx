@@ -1,16 +1,18 @@
-import { Input, Popover, PopoverProps } from '@arco-design/web-react';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
-
+import React, { useCallback, useContext, useState } from 'react';
 import { getImg } from '@extensions/AttributePanel/utils/getImg';
 import { PresetColorsContext } from '@extensions/AttributePanel/components/provider/PresetColorsProvider';
 import { ColorPickerContent } from './ColorPickerContent';
-export interface ColorPickerProps extends PopoverProps {
+import { Input } from '../Input';
+import { Popover } from '@mui/material';
+
+export interface ColorPickerProps  {
   onChange?: (val: string) => void;
   value?: string;
   label: string;
   children?: React.ReactNode;
   showInput?: boolean;
   fixed?: boolean;
+  disabled?: boolean;
 }
 
 const getCollapseItemEle = (node: HTMLElement | null): HTMLElement => {
@@ -42,7 +44,8 @@ export function ColorPicker(props: ColorPickerProps) {
 
   return (
     <div style={{ flex: 1, display: 'flex' }}>
-      <Popover
+      TODO
+      {/* <Popover
         title={props.label}
         trigger='click'
         className='color-picker-popup'
@@ -103,10 +106,11 @@ export function ColorPicker(props: ColorPickerProps) {
             </style>
           </div>
         )}
-      </Popover>
+      </Popover> */}
+
       {showInput && (
         <Input
-          value={props.value}
+          value={props.value ?? ''}
           style={{ outline: 'none', flex: 1 }}
           onChange={onInputChange}
         />

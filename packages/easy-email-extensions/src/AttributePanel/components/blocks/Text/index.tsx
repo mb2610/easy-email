@@ -13,12 +13,12 @@ import { LineHeight } from '@extensions/AttributePanel/components/attributes/Lin
 import { LetterSpacing } from '@extensions/AttributePanel/components/attributes/LetterSpacing';
 
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space, Switch, Tooltip } from '@arco-design/web-react';
-import { Button } from '@arco-design/web-react';
 import { IconFont } from 'easy-email-editor';
 import { HtmlEditor } from '../../UI/HtmlEditor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, IconButton, Tooltip } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Text() {
   const [visible, setVisible] = useState(false);
@@ -26,75 +26,123 @@ export function Text() {
   return (
     <AttributesPanelWrapper
       extra={(
-        <Tooltip content='Html mode'>
-          <Button
-            onClick={() => setVisible(true)}
-            icon={<IconFont iconName='icon-html' />}
-          />
+        <Tooltip arrow title='Html mode'>
+          <IconButton  onClick={() => setVisible(true)}>
+              <IconFont iconName='icon-html' />
+          </IconButton>
         </Tooltip>
       )}
     >
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
+      <CollapseWrapper>
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Dimension-content"
+            id="Dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
             <Height />
             <Padding />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='1' header='Color'>
-          <Grid.Row>
-            <Grid.Col span={11}>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Color-content"
+            id="Color-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Color</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid>
+            <Grid item>
               <Color />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11}>
+            </Grid>
+            <Grid item>
               <ContainerBackgroundColor title='Background color' />
-            </Grid.Col>
-          </Grid.Row>
-        </Collapse.Item>
-        <Collapse.Item name='2' header='Typography'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Typography-content"
+            id="Typography-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Typography</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <Grid>
+              <Grid item>
                 <FontFamily />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontSize />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <LineHeight />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <LetterSpacing />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <TextDecoration />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontWeight />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
             <Align />
 
             <FontStyle />
 
-            <Grid.Row>
-              <Grid.Col span={11} />
-              <Grid.Col offset={1} span={11} />
-            </Grid.Row>
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+            <Grid>
+              <Grid item />
+              <Grid item />
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
       <HtmlEditor visible={visible} setVisible={setVisible} />
     </AttributesPanelWrapper>

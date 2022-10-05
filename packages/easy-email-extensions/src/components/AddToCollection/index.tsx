@@ -1,9 +1,9 @@
-import { Modal } from '@arco-design/web-react';
-import { Stack, useBlock, useEditorProps } from 'easy-email-editor';
+import { useBlock, useEditorProps } from 'easy-email-editor';
 import React from 'react';
 import { Form } from 'react-final-form';
 import { v4 as uuidv4 } from 'uuid';
-import { ImageUploaderField, TextAreaField, TextField } from '../Form';
+import { ImageUploaderField, TextAreaField, InputField } from '../Form';
+import { Modal, Grid, Stack, Button } from '@mui/material';
 
 export const AddToCollection: React.FC<{
   visible: boolean;
@@ -29,42 +29,49 @@ export const AddToCollection: React.FC<{
     setVisible(false);
   };
 
+  const handleClose = () => {
+    setVisible(false);
+  };
+
   return (
     <Form
       initialValues={{ label: '', helpText: '', thumbnail: '' }}
       onSubmit={onSubmit}
     >
       {({ handleSubmit }) => (
-        <Modal
-          maskClosable={false}
-          style={{ zIndex: 2000 }}
-          visible={visible}
-          title='Add to collection'
-          onOk={() => handleSubmit()}
-          onCancel={() => setVisible(false)}
-        >
-          <Stack vertical>
-            <Stack.Item />
-            <TextField
-              label='Title'
-              name='label'
-              validate={(val: string) => {
-                if (!val) return 'Title required!';
-                return undefined;
-              }}
-            />
-            <TextAreaField label='Description' name='helpText' />
-            <ImageUploaderField
-              label='Thumbnail'
-              name={'thumbnail'}
-              uploadHandler={onUploadImage}
-              validate={(val: string) => {
-                if (!val) return 'Thumbnail required!';
-                return undefined;
-              }}
-            />
-          </Stack>
-        </Modal>
+        <>
+          <Modal
+            open={visible}
+            onClose={handleClose}
+            aria-labelledby="parent-modal-title"
+            aria-describedby="parent-modal-description"
+          >
+            <Stack>
+              <InputField
+                label='Title'
+                name='label'
+                validate={(val: string) => {
+                  if (!val) return 'Title required!';
+                  return undefined;
+                }}
+              />
+              <TextAreaField label='Description' name='helpText' rows={4} />
+              <ImageUploaderField
+                label='Thumbnail'
+                name={'thumbnail'}
+                uploadHandler={onUploadImage}
+                validate={(val: string) => {
+                  if (!val) return 'Thumbnail required!';
+                  return undefined;
+                }}
+              />
+                <Grid>
+                  <Button onClick={() => handleSubmit()}>OK</Button>
+                  <Button onClick={() => handleClose()}>Cancel</Button>
+                </Grid>
+              </Stack>
+          </Modal>
+        </>
       )}
     </Form>
   );

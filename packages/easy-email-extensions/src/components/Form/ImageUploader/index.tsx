@@ -1,16 +1,4 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
-import {
-  Dropdown,
-  Grid,
-  Input,
-  Menu,
-  Message,
-  Modal,
-  Popover,
-  Space,
-  Spin,
-} from '@arco-design/web-react';
-import { IconPlus, IconEye, IconDelete, IconAt } from '@arco-design/web-react/icon';
 import styles from './index.module.scss';
 import {
   Uploader,
@@ -19,8 +7,11 @@ import {
 import { classnames } from '@extensions/AttributePanel/utils/classnames';
 import { previewLoadImage } from '@extensions/AttributePanel/utils/previewLoadImage';
 import { MergeTags } from '@extensions';
-import { Button as ArcoButton } from '@arco-design/web-react';
 import { IconFont, useEditorProps } from 'easy-email-editor';
+import { Button, IconButton, CircularProgress, Grid, Modal, Popover, Menu, MenuItem } from '@mui/material';
+import { PhotoCamera, RemoveRedEye, Delete, ImageSearch } from '@mui/icons-material';
+import { Image } from 'mui-image'
+import { Input } from '../Input';
 
 export interface ImageUploaderProps {
   onChange: (val: string) => void;
@@ -37,12 +28,32 @@ export function ImageUploader(props: ImageUploaderProps) {
   const uploadHandlerRef = useRef<UploaderServer | null | undefined>(
     props.uploadHandler
   );
-
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [anchorElImg, setAnchorElImg] = React.useState<null | HTMLElement>(null);
+  const openImg = Boolean(anchorElImg);
   const onChange = props.onChange;
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClickImg= (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElImg(event.currentTarget);
+  };
+  const handleCloseImg = () => {
+    setAnchorElImg(null);
+  };
+  const handleClickItemImg = (value: string) => {
+    onChange(value)
+    handleCloseImg();
+  };
 
   const onUpload = useCallback(() => {
     if (isUploading) {
-      return Message.warning('Uploading...');
+      return console.log('Uploading...');
     }
     if (!uploadHandlerRef.current) return;
 
@@ -86,7 +97,7 @@ export function ImageUploader(props: ImageUploaderProps) {
             props.onChange(picture);
             setIsUploading(false);
           } catch (error: any) {
-            Message.error(error?.message || error || 'Upload failed');
+            console.error(error?.message || error || 'Upload failed');
             setIsUploading(false);
           }
         }
@@ -104,7 +115,7 @@ export function ImageUploader(props: ImageUploaderProps) {
       return (
         <div className={styles['item']}>
           <div className={classnames(styles['info'])}>
-            <Spin />
+            <CircularProgress />
             <div className={styles['btn-wrap']} />
           </div>
         </div>
@@ -113,10 +124,10 @@ export function ImageUploader(props: ImageUploaderProps) {
 
     if (!props.value) {
       return (
-        <div className={styles['upload']} onClick={onUpload}>
-          <IconPlus />
-          <div>Upload</div>
-        </div>
+        <Button variant="contained" component="label" startIcon={<PhotoCamera  />} onClick={onUpload}>
+            Upload
+            <input hidden accept="image/*" multiple type="file" />
+        </Button>
       );
     }
 
@@ -125,12 +136,12 @@ export function ImageUploader(props: ImageUploaderProps) {
         <div className={classnames(styles['info'])}>
           <img src={props.value} />
           <div className={styles['btn-wrap']}>
-            <a title='Preview' onClick={() => setPreview(true)}>
-              <IconEye />
-            </a>
-            <a title='Remove' onClick={() => onRemove()}>
-              <IconDelete />
-            </a>
+            <IconButton  title='Preview' onClick={() => setPreview(true)}>
+               <RemoveRedEye />
+            </IconButton>
+            <IconButton  title='Remove' onClick={() => onRemove}>
+               <Delete />
+            </IconButton>
           </div>
         </div>
       </div>
@@ -140,19 +151,33 @@ export function ImageUploader(props: ImageUploaderProps) {
   if (!props.uploadHandler) {
     return <Input value={props.value} onChange={onChange} />;
   }
+  const open = Boolean(anchorEl);
 
   return (
     <div className={styles.wrap}>
       <div className={styles['container']}>
         {content}
-        <Grid.Row style={{ width: '100%' }}>
+        <Grid style={{ width: '100%' }}>
           {mergeTags && (
+            <>
             <Popover
-              trigger='click'
-              content={<MergeTags value={props.value} onChange={onChange} />}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
             >
-              <ArcoButton icon={<IconFont iconName='icon-merge-tags' />} />
+              <MergeTags
+                  value={props.value}
+                  onChange={onChange}
+                />
             </Popover>
+            <IconButton  onClick={handleClick}>
+                <IconFont iconName='icon-merge-tags' />
+            </IconButton>
+            </>
           )}
           <Input
             style={{ flex: 1 }}
@@ -160,36 +185,52 @@ export function ImageUploader(props: ImageUploaderProps) {
             value={props.value}
             onChange={onChange}
             disabled={isUploading}
-
           />
           {props.autoCompleteOptions && (
-            <Dropdown
-              position="tr"
-              droplist={(
-                <Menu onClickMenuItem={(indexStr) => {
-                  if (!props.autoCompleteOptions) return;
-                  onChange(props.autoCompleteOptions[+indexStr]?.value);
-                }}
-                >
-                  {
-                    props.autoCompleteOptions.map((item, index) => {
-                      return (
-                        <Menu.Item style={{ display: 'flex', alignItems: 'center' }} key={index.toString()}>
-                          <img src={item.value} style={{ width: 20, height: 20 }} />&emsp;<span>{item.label}</span>
-                        </Menu.Item>
-                      );
-                    })
-                  }
-                </Menu>
-              )}
+            <>
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={openImg ? 'long-menu' : undefined}
+              aria-expanded={openImg ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleClickImg}
             >
-              <ArcoButton icon={<IconAt />} />
-            </Dropdown>
+              <ImageSearch/>
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleCloseImg}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              {
+                props.autoCompleteOptions.map((item, index) => {
+                  return (
+                    <MenuItem key={index} onClick={() => handleClickItemImg(item.value)}>
+                      <img src={item.value} style={{ width: 20, height: 20 }} />&emsp;<span>{item.label}</span>
+                    </MenuItem>
+                  );
+                })
+              }
+
+              <MenuItem onClick={handleCloseImg}>My account</MenuItem>
+              <MenuItem onClick={handleCloseImg}>Logout</MenuItem>
+            </Menu>
+            </>
           )}
-        </Grid.Row>
+        </Grid>
       </div>
-      <Modal visible={preview} footer={null} onCancel={() => setPreview(false)}>
-        <img alt='Preview' style={{ width: '100%' }} src={props.value} />
+      <Modal
+         open={preview}
+         onClose={() => setPreview}
+         aria-labelledby="modal-modal-title"
+         aria-describedby="modal-modal-description"
+      >
+         <Image src={props.value} showLoading />
       </Modal>
     </div>
   );

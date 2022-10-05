@@ -1,7 +1,7 @@
 
-import { Tooltip } from '@arco-design/web-react';
-import { classnames } from '@extensions/utils/classnames';
 import React from 'react';
+import { Tooltip } from '@mui/material';
+import { classnames } from '@extensions/utils/classnames';
 
 export const ToolItem: React.FC<{
   title?: string;
@@ -25,11 +25,10 @@ export const ToolItem: React.FC<{
     );
   }
   return (
-    <Tooltip mini position='bottom' content={props.title}>
+    <Tooltip arrow placement='bottom' title={props.title}>
       <button
         tabIndex={-1}
         className={classnames('easy-email-extensions-emailToolItem', props.isActive && 'easy-email-extensions-emailToolItem-active')}
-        title={props.title}
         onClick={props.onClick}
         style={props.style}
       >

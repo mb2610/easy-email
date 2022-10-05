@@ -1,4 +1,3 @@
-import { Collapse, Input, Message } from '@arco-design/web-react';
 import {
   BasicType,
   BlockManager,
@@ -16,6 +15,9 @@ import {
 } from 'easy-email-editor';
 import { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Accordion, AccordionSummary, AccordionDetails, Typography, TextField } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function SourceCodePanel() {
   const { setValueByIdx, focusBlock, values } = useBlock();
@@ -51,7 +53,7 @@ export function SourceCodePanel() {
         }
         setValueByIdx(focusIdx, parseValue);
       } catch (error: any) {
-        Message.error(error?.message || error);
+        console.error(error?.message || error);
       }
     },
     [focusIdx, setValueByIdx]
@@ -74,7 +76,7 @@ export function SourceCodePanel() {
 
         setValueByIdx(focusIdx, parseValue);
       } catch (error) {
-        Message.error('Invalid content');
+        console.error('Invalid content');
       }
     },
     [focusIdx, setValueByIdx, values]
@@ -100,32 +102,51 @@ export function SourceCodePanel() {
   if (!focusBlock) return null;
 
   return (
-    <Collapse>
-      <Collapse.Item
-        name='json'
-        header='Json source'
-        contentStyle={{ padding: '8px 13px' }}
-      >
-        <Input.TextArea
-          key={code}
-          defaultValue={code}
-          autoSize={{ maxRows: 25 }}
-          onBlur={onChangeCode}
-        />
-      </Collapse.Item>
-      <Collapse.Item
-        name='mjml'
-        header='MJML source'
-        contentStyle={{ padding: '8px 13px' }}
-      >
-        <Input.TextArea
-          key={code}
-          value={mjmlText}
-          autoSize={{ maxRows: 25 }}
-          onChange={onChangeMjmlText}
-          onBlur={onMjmlChange}
-        />
-      </Collapse.Item>
-    </Collapse>
+    <>
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="json-content"
+            id="json-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Json source</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <TextField
+                label="Multiline"
+                multiline
+                rows={25}
+                defaultValue={code}
+                onBlur={onChangeCode}
+              />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="mjml-content"
+            id="mjml-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>MJML source</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+              <TextField
+                label="Multiline"
+                multiline
+                rows={25}
+                defaultValue={mjmlText}
+                onChange={(e) => onChangeMjmlText(e.target.value)}
+                onBlur={onMjmlChange}
+              />
+          </AccordionDetails>
+        </Accordion>
+    </>
   );
 }

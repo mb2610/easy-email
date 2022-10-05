@@ -22,9 +22,7 @@ export function IconBgColor({ selectionRange, execCommand, getPopoverMountNode }
     <ColorPicker
       label=''
       showInput={false}
-      position='tl'
       onChange={(color) => execCommand('hiliteColor', color)}
-      getPopupContainer={getPopoverMountNode}
     >
       <ToolItem
         icon={(

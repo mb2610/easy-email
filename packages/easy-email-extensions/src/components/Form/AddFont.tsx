@@ -1,11 +1,10 @@
 import { FieldArray } from 'react-final-form-arrays';
 import React from 'react';
-import { IconDelete, IconPlus } from '@arco-design/web-react/icon';
-import { TextField } from '.';
-import { Button } from '@arco-design/web-react';
 import { Stack, TextStyle, useBlock, useFocusIdx } from 'easy-email-editor';
 import { Help } from '@extensions/AttributePanel/components/UI/Help';
 import { IPage } from 'easy-email-core';
+import { Delete, Add } from '@mui/icons-material';
+import { IconButton, TextField } from '@mui/material';
 
 export function AddFont() {
   const { focusBlock } = useBlock();
@@ -23,13 +22,11 @@ export function AddFont() {
                   Import font <Help title='Points to a hosted css file' />
                 </TextStyle>
                 <Stack>
-                  <Button
-                    size='small'
-                    icon={<IconPlus />}
-                    onClick={() =>
+                  <IconButton size='small' onClick={() =>
                       arrayHelpers.fields.push({ name: '', href: '' })
-                    }
-                  />
+                    }>
+                    <Add />
+                  </IconButton>
                 </Stack>
               </Stack>
 
@@ -52,10 +49,9 @@ export function AddFont() {
                         </Stack.Item>
                         <Stack vertical spacing='loose'>
                           <Stack.Item />
-                          <Button
-                            icon={<IconDelete />}
-                            onClick={() => arrayHelpers.fields.remove(index)}
-                          />
+                          <IconButton size='small' onClick={() => arrayHelpers.fields.remove(index)}>
+                            <Delete />
+                          </IconButton>
                         </Stack>
                       </Stack>
                     </div>

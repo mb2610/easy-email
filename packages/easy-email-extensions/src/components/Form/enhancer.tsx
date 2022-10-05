@@ -1,10 +1,10 @@
 import { TextStyle, Stack, StackProps } from 'easy-email-editor';
-import { Form, Grid, Space } from '@arco-design/web-react';
 import { Field, FieldProps, useField } from 'react-final-form';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.scss';
 import { InputProps } from './Input';
 import { debounce } from 'lodash';
+import { Grid } from '@mui/material'
 
 export interface EnhancerProps<T> extends Partial<FieldProps<T, any>> {
   name: string;
@@ -144,17 +144,17 @@ export default function enhancer<P, C extends (...rest: any[]) => any = any>(
               };
 
           return (
-            <Form.Item
-              noStyle
-              validateStatus={touched && error ? 'error' : undefined}
-              help={touched && error}
-            >
-              <Space direction='vertical' style={{ width: '100%' }}>
-                <Grid.Row align='center'>
-                  <Grid.Col
-                    span={wrapperStyle.label.span}
-                    offset={wrapperStyle.label.offset}
-                    style={{ textAlign: wrapperStyle.textAlign }}
+            // <Form.Item
+            //   noStyle
+            //   validateStatus={touched && error ? 'error' : undefined}
+            //   help={touched && error}
+            // >
+              <Grid direction='column' sx={{ width: '100%' }}>
+                <Grid>
+                  <Grid
+                    // span={wrapperStyle.label.span}
+                    // offset={wrapperStyle.label.offset}
+                    sx={{ textAlign: wrapperStyle.textAlign }}
                   >
                     <label
                       className={
@@ -170,13 +170,13 @@ export default function enhancer<P, C extends (...rest: any[]) => any = any>(
                       )}
                       <div style={{ flex: 1 }}> {label}</div>
                     </label>
-                  </Grid.Col>
-                  <Grid.Col
-                    style={{
+                  </Grid>
+                  <Grid
+                    sx={{
                       textAlign: 'left',
                     }}
-                    offset={wrapperStyle.value.offset}
-                    span={wrapperStyle.value.span}
+                    // offset={wrapperStyle.value.offset}
+                    // span={wrapperStyle.value.span}
                   >
                     <Component
                       size={size}
@@ -191,15 +191,15 @@ export default function enhancer<P, C extends (...rest: any[]) => any = any>(
                       }
                       onChange={onFieldChange}
                     />
-                  </Grid.Col>
-                </Grid.Row>
+                  </Grid>
+                </Grid>
                 {helpText && (
                   <div className={styles.helperText}>
                     <small>{helpText}</small>
                   </div>
                 )}
-              </Space>
-            </Form.Item>
+              </Grid>
+            // </Form.Item>
           );
         }}
       </Field>

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { IconFont, useFocusIdx } from 'easy-email-editor';
 import { TextAreaField } from '@extensions/components/Form';
 import { AttributesPanelWrapper } from '../../attributes';
-import { Button, Tooltip } from '@arco-design/web-react';
 import { HtmlEditor } from '../../UI/HtmlEditor';
+import { IconButton, Tooltip } from '@mui/material';
 
 export function Raw() {
   const { focusIdx } = useFocusIdx();
@@ -12,11 +12,10 @@ export function Raw() {
     <AttributesPanelWrapper
       style={{ padding: 20 }}
       extra={
-        <Tooltip content='Html mode'>
-          <Button
-            onClick={() => setVisible(true)}
-            icon={<IconFont iconName='icon-html' />}
-          />
+        <Tooltip arrow title='Html mode'>
+          <IconButton color="primary" onClick={() => setVisible(true)}>
+            <IconFont iconName='icon-html' />
+          </IconButton>
         </Tooltip>
       }
     >

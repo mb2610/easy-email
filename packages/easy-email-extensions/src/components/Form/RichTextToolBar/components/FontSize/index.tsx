@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 
-import { Menu, Popover } from '@arco-design/web-react';
 import { ToolItem } from '../ToolItem';
 import { IconFont } from 'easy-email-editor';
-import styleText from '../../styles/ToolsPopover.css?inline';
+import { Menu, MenuItem } from '@mui/material'
 
 const list = [
   {
@@ -43,61 +42,53 @@ export interface FontSizeProps {
 
 export function FontSize(props: FontSizeProps) {
   const { execCommand } = props;
-  const [visible, setVisible] = React.useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const visible = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const onChange = useCallback((val: string) => {
     execCommand('fontSize', val);
-    setVisible(false);
+    handleClose();
   }, [execCommand]);
 
-  const onVisibleChange = useCallback((v: boolean) => {
-    setVisible(v);
-  }, []);
-
   return (
-    <Popover
-      trigger='click'
-      color='#fff'
-      position='left'
-      className='easy-email-extensions-Tools-Popover'
-      popupVisible={visible}
-      onVisibleChange={onVisibleChange}
-      content={(
-        <>
-          <style>{styleText}</style>
-          <div
-            style={{
-              maxWidth: 150,
-              maxHeight: 350,
-              overflowY: 'auto',
-              overflowX: 'hidden',
-            }}
-          >
-            <Menu
-              onClickMenuItem={onChange}
-              selectedKeys={[]}
-              style={{ border: 'none', padding: 0 }}
-            >
-              {list.map((item) => (
-                <Menu.Item
-                  style={{ lineHeight: '30px', height: 30 }}
-                  key={item.value}
-                >
-                  {item.label}
-                </Menu.Item>
-              ))}
-            </Menu>
-          </div>
-        </>
-
-      )}
-      getPopupContainer={props.getPopupContainer}
-    >
-      <ToolItem
+    <>
+     <ToolItem
         title='Font size'
         icon={<IconFont iconName='icon-font-color' />}
+        onClick={handleClick}
       />
-    </Popover>
+
+      <Menu
+        // className='easy-email-extensions-Tools-Popover'
+        MenuListProps={{
+          'aria-labelledby': 'long-button',
+        }}
+        anchorEl={anchorEl}
+        open={visible}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: 350 * 4.5,
+            width: '150px',
+          },
+        }}
+      >
+        {list.map((option) => (
+          <MenuItem key={option.value} onClick={(e) => onChange(option.value)}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
   );
 
 }

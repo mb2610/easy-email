@@ -4,7 +4,7 @@ import { IconFont } from 'easy-email-editor';
 import React, { useMemo } from 'react';
 import { ToolItem } from '../../ToolItem';
 
-export function IconFontColor({ selectionRange, execCommand, getPopoverMountNode }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void; getPopoverMountNode: () => HTMLElement; }) {
+export function IconFontColor({ selectionRange, execCommand }: { selectionRange: Range | null; execCommand: (cmd: string, val?: any) => void;}) {
 
   const color = useMemo(() => {
     if (!selectionRange) return undefined;
@@ -21,9 +21,7 @@ export function IconFontColor({ selectionRange, execCommand, getPopoverMountNode
   return (
     <ColorPicker
       label=''
-      position='tl'
       onChange={(color) => execCommand('foreColor', color)}
-      getPopupContainer={getPopoverMountNode}
       showInput={false}
     >
       <ToolItem

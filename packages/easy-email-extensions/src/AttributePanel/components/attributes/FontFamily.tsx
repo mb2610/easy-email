@@ -1,21 +1,20 @@
 import React, { useMemo } from 'react';
 import { useFocusIdx } from 'easy-email-editor';
-import { AutoCompleteField } from '../../../components/Form';
+import { SelectField } from '../../../components/Form';
 import { useFontFamily } from '@extensions/hooks/useFontFamily';
 
-export function FontFamily({ name }: { name?: string; }) {
+export function FontFamily({ name, disabled }: { name?: string; disabled?: boolean }) {
   const { focusIdx } = useFocusIdx();
   const { fontList } = useFontFamily();
 
   return useMemo(() => {
     return (
-      <AutoCompleteField
-        style={{ minWidth: 100, flex: 1 }}
-        showSearch
-        label='Font family'
+      <SelectField
         name={name || `${focusIdx}.attributes.font-family`}
-        options={fontList}
-      />
+        options={[{value: '', label: 'None'}, ...fontList]}
+        disabled={disabled}
+        label='Font family'
+        />
     );
   }, [focusIdx, fontList, name]);
 }

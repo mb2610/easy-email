@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { InputWithUnitField, TextField } from '../../../components/Form';
+import { InputWithUnitField } from '../../../components/Form';
 import { useFocusIdx, Stack, useBlock, TextStyle } from 'easy-email-editor';
 import { createBlockDataByType } from 'easy-email-core';
 import { Form, useFormState } from 'react-final-form';
-import { Grid } from '@arco-design/web-react';
+import { Grid } from '@mui/material';
 import { get } from 'lodash';
 
 export interface PaddingProps {
@@ -78,24 +78,15 @@ export function Padding(props: PaddingProps = {}) {
           <>
             <Stack vertical spacing='extraTight'>
               <TextStyle variation='strong'>{title}</TextStyle>
-
-              <Grid.Row>
-                <Grid.Col span={11}>
+              <Grid direction='column' spacing={3}>
                   <InputWithUnitField label='Top' name='top' />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
                   <InputWithUnitField label='Left' name='left' />
-                </Grid.Col>
-              </Grid.Row>
+              </Grid>
 
-              <Grid.Row>
-                <Grid.Col span={11}>
+              <Grid direction='column' spacing={3}>
                   <InputWithUnitField label='Bottom' name='bottom' />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
                   <InputWithUnitField label='Right' name='right' />
-                </Grid.Col>
-              </Grid.Row>
+              </Grid>
             </Stack>
             <PaddingChangeWrapper onChange={onChancePadding} />
           </>

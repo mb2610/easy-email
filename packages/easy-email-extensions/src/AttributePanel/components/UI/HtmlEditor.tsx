@@ -1,4 +1,3 @@
-import { Button, Drawer } from '@arco-design/web-react';
 import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { BasicType, IText } from 'easy-email-core';
 import {
@@ -9,6 +8,7 @@ import {
   useFocusIdx,
 } from 'easy-email-editor';
 import { ShadowDom } from '@extensions/components/ShadowDom';
+import { Button, Drawer, Box } from '@mui/material';
 
 const CodeMirrorEditorPromise = import(
   '../../../components/Form/CodemirrorEditor'
@@ -61,27 +61,26 @@ export const HtmlEditor: React.FC<{
 
   return (
     <Drawer
-      placement='left'
-      headerStyle={{ display: 'block', lineHeight: '48px' }}
-      title={(
+      anchor='right'
+      sx={{
+        width: "100vh",
+        height: "100hv"
+      }}
+      variant="permanent"
+      open={visible}
+    >
+      <Box sx={{lineHeight: '48px', display: 'block'}}>
         <Stack distribution='equalSpacing'>
           <TextStyle variation='strong' size='large'>
             Html
           </TextStyle>
           <Stack>
-            <Button type='primary' onClick={onSave}>
+            <Button variant='contained' color='primary' onClick={onSave}>
               Save
             </Button>
           </Stack>
         </Stack>
-      )}
-      closable={false}
-      escToExit={false}
-      width='100vw'
-      visible={visible}
-      footer={null}
-      bodyStyle={{ padding: 0, overflow: 'hidden' }}
-    >
+      </Box>
       <div style={{ display: 'flex', height: '100%' }}>
         <div style={{ flex: 1, height: '100%' }}>
           <Suspense

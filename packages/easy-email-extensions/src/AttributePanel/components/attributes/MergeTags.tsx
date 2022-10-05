@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Tree, TreeSelect } from '@arco-design/web-react';
 import { get, isObject } from 'lodash';
 import { useBlock, useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { getContextMergeTags } from '@extensions/utils/getContextMergeTags';
+import { TreeView, TreeItem } from "@mui/lab"
+import { ExpandMore, ChevronRight} from '@mui/icons-material';
 
 export const MergeTags: React.FC<{
   onChange: (v: string) => void;
   value: string;
-  isSelect?: boolean;
 }> = React.memo((props) => {
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const { focusIdx } = useFocusIdx();
@@ -81,43 +81,37 @@ export const MergeTags: React.FC<{
       renderMergeTagContent ? (
         renderMergeTagContent({
           onChange: props.onChange,
-          isSelect: Boolean(props.isSelect),
-          value: props.value,
+          value: props.value
         })
       ) : (
         <></>
       ),
-    [renderMergeTagContent, props.onChange, props.isSelect, props.value]
+    [renderMergeTagContent, props.onChange, props.value]
   );
 
   if (renderMergeTagContent) {
     return <>{mergeTagContent}</>;
   }
 
+  const renderTree = (nodes: any) => (
+    <TreeItem key={nodes.key} nodeId={nodes.id} label={nodes.title} onClick={() => {
+      if(Array.isArray(nodes.children)) onSelect(nodes.id)
+    }}>
+      {Array.isArray(nodes.children)
+        ? nodes.children.map((node: any) => renderTree(node))
+        : null}
+    </TreeItem>
+  );
+
   return (
-    <div style={{ color: '#333' }}>
-      {props.isSelect ? (
-        <TreeSelect
-          value={props.value}
-          size='small'
-          dropdownMenuStyle={{ maxHeight: 400, overflow: 'auto' }}
-          placeholder='Please select'
-          treeData={treeOptions}
-          onChange={(val) => onSelect(val)}
-        />
-      ) : (
-        <Tree
-          expandedKeys={expandedKeys}
-          onExpand={setExpandedKeys}
-          selectedKeys={[]}
-          treeData={treeOptions}
-          onSelect={(vals: any[]) => onSelect(vals[0])}
-          style={{
-            maxHeight: 400,
-            overflow: 'auto',
-          }}
-        />
-      )}
-    </div>
+    <TreeView
+      aria-label="rich object"
+      defaultCollapseIcon={<ExpandMore />}
+      defaultExpanded={['root']}
+      defaultExpandIcon={<ChevronRight />}
+      sx={{ height: 400, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+    >
+      {renderTree(treeOptions)}
+    </TreeView>
   );
 });

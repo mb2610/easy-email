@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { useFocusIdx } from 'easy-email-editor';
-import { TextField } from '../../../components/Form';
+import { InputField } from '../../../components/Form';
 
 export function ClassName() {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {
     return (
-      <TextField label='Class name' name={`${focusIdx}.attributes.css-class`} />
+      <InputField label='Class name' name={`${focusIdx}.attributes.css-class`} />
     );
   }, [focusIdx]);
 }

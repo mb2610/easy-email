@@ -1,11 +1,11 @@
-import { Collapse, Grid, Space, Typography } from '@arco-design/web-react';
 import { AdvancedType, BlockManager, IBlockData } from 'easy-email-core';
 import { BlockAvatarWrapper, IconFont } from 'easy-email-editor';
 import React, { useMemo, useState } from 'react';
-import { IconCaretRight, IconCaretUp } from '@arco-design/web-react/icon';
 import { getIconNameByBlockType } from '@extensions/utils/getIconNameByBlockType';
 import styles from './index.module.scss';
 import { useExtensionProps } from '@extensions/components/Providers/ExtensionProvider';
+import { Typography, Accordion, AccordionSummary, AccordionDetails, Grid } from '@mui/material';
+import { ExpandMore, ArrowLeft, ArrowDropUp  } from "@mui/icons-material";
 
 export function Blocks() {
   const { categories } = useExtensionProps();
@@ -17,69 +17,80 @@ export function Blocks() {
     [categories]
   );
   return (
-    <Collapse
-      defaultActiveKey={defaultActiveKey}
-      style={{ paddingBottom: 30, minHeight: '100%' }}
-    >
+    <>
       {categories.map((cat, index) => {
         if (cat.displayType === 'column') {
           return (
-            <Collapse.Item
-              key={index}
-              contentStyle={{ padding: '0px 20px' }}
-              name={cat.label}
-              header={cat.label}
-            >
-              <Space direction='vertical'>
-                <div />
-              </Space>
-              {cat.blocks.map((item) => (
-                <LayoutItem
-                  key={item.title}
-                  title={item.title || ''}
-                  columns={item.payload}
-                />
-              ))}
-
-              <Space direction='vertical'>
-                <div />
-              </Space>
-            </Collapse.Item>
-          );
+            <Accordion key={index}>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls={cat.label}
+                id={cat.label}
+                sx={{
+                  backgroundColor: '#CCC'
+                }}
+              >
+                <Typography>{cat.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {cat.blocks.map((item) => (
+                  <LayoutItem
+                    key={item.title}
+                    title={item.title || ''}
+                    columns={item.payload}
+                  />
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          )
         }
 
         if (cat.displayType === 'custom') {
           return (
-            <Collapse.Item
-              key={index}
-              contentStyle={{ padding: 0, paddingBottom: 0, paddingTop: 20 }}
-              name={cat.label}
-              header={cat.label}
-            >
-              <Grid.Row>
-                {cat.blocks.map((item, index) => {
-                  return <React.Fragment key={index}>{item}</React.Fragment>;
-                })}
-              </Grid.Row>
-            </Collapse.Item>
+          <Accordion key={index}>
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls={cat.label}
+                id={cat.label}
+                sx={{
+                  backgroundColor: '#CCC'
+                }}
+              >
+                <Typography>{cat.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid>
+                  {cat.blocks.map((item, index) => {
+                    return <React.Fragment key={index}>{item}</React.Fragment>;
+                  })}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           );
         }
         return (
-          <Collapse.Item
-            key={index}
-            contentStyle={{ padding: 0, paddingBottom: 0, paddingTop: 20 }}
-            name={cat.label}
-            header={cat.label}
-          >
-            <Grid.Row>
-              {cat.blocks.map((item, index) => {
-                return <BlockItem key={index} {...(item as any)} />;
-              })}
-            </Grid.Row>
-          </Collapse.Item>
+          <Accordion key={index}>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls={cat.label}
+              id={cat.label}
+              sx={{
+                backgroundColor: '#CCC'
+              }}
+            >
+              <Typography>{cat.label}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid>
+                {cat.blocks.map((item, index) => {
+                  return <BlockItem key={index} {...(item as any)} />;
+                })}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
         );
       })}
-    </Collapse>
+    </>
   );
 }
 
@@ -104,9 +115,9 @@ function BlockItem({
             style={{ fontSize: 20 }}
             iconName={getIconNameByBlockType(type)}
           />
-          <Typography.Text style={{ marginTop: 10 }}>
+          <Typography>
             {title || block?.name}
-          </Typography.Text>
+          </Typography>
         </div>
       </BlockAvatarWrapper>
     </div>
@@ -134,7 +145,7 @@ function LayoutItem({
       >
         <span>{title}</span>
         {columns.length > 1 && (
-          <span>{!visible ? <IconCaretRight /> : <IconCaretUp />}</span>
+          <span>{!visible ? <ArrowLeft /> : <ArrowDropUp />}</span>
         )}
       </p>
       {columns.map((item, index) => {

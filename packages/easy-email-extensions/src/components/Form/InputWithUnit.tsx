@@ -1,13 +1,8 @@
-import {
-  Input as ArcoInput,
-  InputProps as ArcoInputProps,
-  Select,
-} from '@arco-design/web-react';
-import React, { useCallback, useMemo } from 'react';
-import styles from './index.module.scss';
+import React from 'react';
 import { Input } from './Input';
+import { TextFieldProps } from '@mui/material';
 
-export interface InputWithUnitProps extends Omit<ArcoInputProps, 'onChange'> {
+export interface InputWithUnitProps extends Omit<TextFieldProps, 'onChange'> {
   value: string;
   onChange: (val: string) => void;
   unitOptions?: Array<{ value: string; label: string }> | 'default' | 'percent';

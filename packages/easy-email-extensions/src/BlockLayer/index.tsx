@@ -31,9 +31,9 @@ import {
   useAvatarWrapperDrop,
 } from './hooks/useAvatarWrapperDrop';
 import { getIconNameByBlockType } from '@extensions/utils/getIconNameByBlockType';
-import { Space } from '@arco-design/web-react';
 import { getBlockTitle } from '@extensions/utils/getBlockTitle';
 import { isEqual } from 'lodash';
+import { Stack } from '@mui/material';
 
 export interface IBlockDataWithId extends IBlockData {
   id: string;
@@ -93,7 +93,7 @@ export function BlockLayer(props: BlockLayerProps) {
             !isPage && 'email-block'
           )}
         >
-          <Space align='center' size='mini'>
+          <Stack direction="row" spacing={0}>
             <IconFont
               iconName={getIconNameByBlockType(data.type)}
               style={{ fontSize: 12, color: '#999' }}
@@ -109,7 +109,7 @@ export function BlockLayer(props: BlockLayerProps) {
             >
               <TextStyle size='smallest'>{title}</TextStyle>
             </div>
-          </Space>
+          </Stack>
           <div className={styles.eyeIcon}>
             <EyeIcon blockData={data} onToggleVisible={onToggleVisible} />
           </div>

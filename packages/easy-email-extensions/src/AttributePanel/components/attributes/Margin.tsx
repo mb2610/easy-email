@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TextField } from '../../../components/Form';
+import { InputField } from '../../../components/Form';
 import { useFocusIdx, Stack, TextStyle } from 'easy-email-editor';
 
 export function Margin() {
@@ -11,7 +11,7 @@ export function Margin() {
         <TextStyle size='large'>Margin</TextStyle>
         <Stack wrap={false}>
           <Stack.Item fill>
-            <TextField
+            <InputField
               label='Top'
               quickchange
               name={`${focusIdx}.attributes.marginTop`}
@@ -19,7 +19,7 @@ export function Margin() {
             />
           </Stack.Item>
           <Stack.Item fill>
-            <TextField
+            <InputField
               label='Bottom'
               quickchange
               name={`${focusIdx}.attributes.marginBottom`}
@@ -30,7 +30,7 @@ export function Margin() {
 
         <Stack wrap={false}>
           <Stack.Item fill>
-            <TextField
+            <InputField
               label='Left'
               quickchange
               name={`${focusIdx}.attributes.marginLeft`}
@@ -38,7 +38,7 @@ export function Margin() {
             />
           </Stack.Item>
           <Stack.Item fill>
-            <TextField
+            <InputField
               label='Right'
               quickchange
               name={`${focusIdx}.attributes.marginRight`}

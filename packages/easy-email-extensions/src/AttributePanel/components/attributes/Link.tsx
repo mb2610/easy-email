@@ -1,23 +1,27 @@
 import React, { useMemo } from 'react';
-import { useFocusIdx, Stack } from 'easy-email-editor';
-import { IconLink } from '@arco-design/web-react/icon';
-import { SelectField, TextField } from '../../../components/Form';
-import { Grid } from '@arco-design/web-react';
+import { useFocusIdx } from 'easy-email-editor';
+import { SelectField, InputField } from '../../../components/Form';
+import { Grid, InputAdornment } from '@mui/material';
+import { Link as LinkIcon } from '@mui/icons-material';
 
 export function Link() {
   const { focusIdx } = useFocusIdx();
 
   return useMemo(() => {
     return (
-      <Grid.Row>
-        <Grid.Col span={11}>
-          <TextField
-            prefix={<IconLink />}
-            label={<span>Href&nbsp;&nbsp;&nbsp;</span>}
+      <Grid direction='column' spacing={2}>
+        <InputField
             name={`${focusIdx}.attributes.href`}
+            label={<span>Href&nbsp;&nbsp;&nbsp;</span>}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            }}
+            variant="outlined"
           />
-        </Grid.Col>
-        <Grid.Col offset={1} span={11}>
           <SelectField
             label='Target'
             name={`${focusIdx}.attributes.target`}
@@ -32,8 +36,7 @@ export function Link() {
               },
             ]}
           />
-        </Grid.Col>
-      </Grid.Row>
+      </Grid>
     );
   }, [focusIdx]);
 }

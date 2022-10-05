@@ -1,6 +1,5 @@
 import { article, IArticle } from '@demo/services/article';
 import createSliceState from './common/createSliceState';
-import { Message } from '@arco-design/web-react';
 import { history } from '@demo/utils/history';
 import { emailToImage } from '@demo/utils/emailToImage';
 import { IBlockData, BlockManager, BasicType, AdvancedType } from 'easy-email-core';
@@ -106,7 +105,7 @@ export default createSliceState({
       try {
         let isDefaultTemplate = await getTemplate(payload.id);
         if (isDefaultTemplate) {
-          Message.error('Cannot change the default template');
+          console.error('Cannot change the default template');
           return;
         }
 
@@ -130,7 +129,7 @@ export default createSliceState({
       try {
         await article.deleteArticle(payload.id);
         payload.success();
-        Message.success('Removed success.');
+        console.log('Removed success.');
       } catch (error: any) {
         if (error?.response?.status === 404) {
           throw {

@@ -1,10 +1,9 @@
-import { Grid, PopoverProps, Space, Tooltip } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
 import { Form } from 'react-final-form';
-import { IconFont, Stack, TextStyle } from 'easy-email-editor';
-import { SearchField, SwitchField } from '@extensions/components/Form';
+import { IconFont } from 'easy-email-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'easy-email-core';
+import { Popover, TextField, Grid, Button, FormGroup, FormControlLabel, Switch } from "@mui/material"
 
 export interface LinkParams {
   link: string;
@@ -13,9 +12,10 @@ export interface LinkParams {
   linkNode: HTMLAnchorElement | null;
 }
 
-export interface LinkProps extends PopoverProps {
+export interface LinkProps {
   currentRange: Range | null | undefined;
   onChange: (val: LinkParams) => void;
+  getPopupContainer: () => HTMLElement;
 }
 
 function getAnchorElement(
@@ -59,6 +59,17 @@ export function Link(props: LinkProps) {
     };
   }, [props.currentRange]);
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const visible = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const onSubmit = useCallback(
     (values: LinkParams) => {
       props.onChange(values);
@@ -67,69 +78,49 @@ export function Link(props: LinkProps) {
   );
 
   return (
-    <Form
-      key={initialValues.link}
-      enableReinitialize
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-    >
-      {({ handleSubmit }) => {
-        return (
-          <Tooltip
-            {...props}
-            trigger='click'
-            color='#fff'
-            position='tl'
-            content={(
-              <div style={{ color: '#333' }}>
-                <Stack vertical spacing='none'>
-                  <SearchField
-                    size='small'
-                    name='link'
-                    label='Link'
-                    labelHidden
-                    searchButton='Apply'
-                    placeholder='https://www.example.com'
-                    onSearch={() => handleSubmit()}
-                  />
-                </Stack>
-                <Grid.Row>
-                  <Grid.Col span={12}>
-                    <Space align='center' size='mini'>
-                      <TextStyle size='smallest'>Target</TextStyle>
-                      <SwitchField
-                        size='small'
-                        label='Target'
-                        labelHidden
-                        name='blank'
-                        checkedText='blank'
-                        uncheckedText='self'
-                        inline
-                      />
-                    </Space>
-                  </Grid.Col>
-                  <Grid.Col span={12}>
-                    <Space align='center' size='mini'>
-                      <TextStyle size='smallest'>Underline</TextStyle>
-                      <SwitchField
-                        size='small'
-                        label='Underline'
-                        labelHidden
-                        name='underline'
-                        checkedText='off'
-                        uncheckedText='on'
-                        inline
-                      />
-                    </Space>
-                  </Grid.Col>
-                </Grid.Row>
-              </div>
-            )}
-          >
-            <ToolItem isActive={Boolean(initialValues.link)} title='Link' icon={<IconFont iconName='icon-link' />} />
-          </Tooltip>
-        );
-      }}
-    </Form>
+    <>
+      <ToolItem isActive={Boolean(initialValues.link)} title='Link' onClick={handleClick} icon={<IconFont iconName='icon-link' />} />
+      <Popover
+        open={visible}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+      >
+        <Form
+          key={initialValues.link}
+          enableReinitialize
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+        >
+          {({ handleSubmit }) => {
+            return (
+              <Grid spacing={2} direction="column">
+                  <TextField name="link" label="Link" variant="standard" size='small' placeholder='https://www.example.com' />
+                  <Grid spacing={2} direction="row">
+                    <Grid item xs>
+                      <FormGroup>
+                        <FormControlLabel control={<Switch name='blank' defaultChecked />} label="Target" />
+                      </FormGroup>
+                    </Grid>
+                    <Grid item xs>
+                      <FormGroup>
+                        <FormControlLabel control={<Switch name='underline' defaultChecked />} label="Underline" />
+                      </FormGroup>
+                    </Grid>
+                  </Grid>
+                  <Button variant='outlined' size='small' type='submit'>Apply</Button>
+              </Grid>
+            );
+          }}
+        </Form>
+      </Popover>
+    </>
   );
 }

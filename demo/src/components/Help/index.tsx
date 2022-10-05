@@ -1,13 +1,11 @@
 import React from 'react';
-import { IconQuestionCircle } from '@arco-design/web-react/icon';
-import { Tooltip, TooltipProps } from '@arco-design/web-react';
+import { QuestionAnswerRounded } from '@mui/icons-material';
+import { Tooltip, TooltipProps } from '@mui/material';
 
-export function Help(
-  props: TooltipProps & Partial<{ style: Partial<React.CSSProperties> }>
-) {
+export function Help(props: TooltipProps) {
   return (
     <Tooltip {...{ ...props, style: undefined }}>
-      <IconQuestionCircle style={props.style} />
+      <QuestionAnswerRounded />
     </Tooltip>
   );
 }

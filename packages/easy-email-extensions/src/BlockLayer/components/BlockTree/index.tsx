@@ -5,14 +5,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Tree } from '@arco-design/web-react';
-import {
-  AllowDrop,
-  NodeInstance,
-  TreeProps,
-} from '@arco-design/web-react/es/Tree/interface';
 import { debounce } from 'lodash';
 import { transparentImage } from './transparentImage';
+import { TreeItem, TreeView, TreeItemProps} from '@mui/lab'
 
 interface TreeNode<T> {
   id: string;
@@ -104,99 +99,99 @@ export function BlockTree<T extends TreeNode<T>>(props: BlockTreeProps<T>) {
     );
   }, [props.expandedKeys]);
 
-  const onDragStart = useCallback(
-    (e: React.DragEvent<HTMLSpanElement>, node: NodeInstance) => {
-      e.dataTransfer.dropEffect = 'none';
-      // e.dataTransfer.setDragImage(img, 0, 0);
-      const dragNodeData = (node.props as any).dataRef as T;
-      dragNode.current = {
-        dataRef: dragNodeData,
-        parent: (node.props as any).parent,
-        key: node.props._key as string,
-        parentKey: node.props.parentKey as string,
-      };
-      propsDragStart?.();
-    },
-    [propsDragStart]
-  );
+  // const onDragStart = useCallback(
+  //   (e: React.DragEvent<HTMLSpanElement>, node: TreeItem) => {
+  //     e.dataTransfer.dropEffect = 'none';
+  //     // e.dataTransfer.setDragImage(img, 0, 0);
+  //     const dragNodeData = (node.props as any).dataRef as T;
+  //     dragNode.current = {
+  //       dataRef: dragNodeData,
+  //       parent: (node.props as any).parent,
+  //       key: node.props._key as string,
+  //       parentKey: node.props.parentKey as string,
+  //     };
+  //     propsDragStart?.();
+  //   },
+  //   [propsDragStart]
+  // );
 
-  const onDragMove: AllowDrop = useCallback(
-    (option) => {
-      if (!dragNode.current) return false;
-      const dropData = (option.dropNode.props as any).dataRef as T;
-      const dropId = option.dropNode.props._key!;
-      const currentDropData: Parameters<BlockTreeProps<T>['allowDrop']>[0] = {
-        dragNode: { key: dragNode.current.key },
-        dropNode: {
-          dataRef: dropData,
-          parent: (option.dropNode.props as any).parent,
-          key: dropId,
-        },
-        dropPosition: option.dropPosition,
-      };
-      const isAllowDrop = allowDrop(currentDropData);
+  // const onDragMove: AllowDrop = useCallback(
+  //   (option) => {
+  //     if (!dragNode.current) return false;
+  //     const dropData = (option.dropNode.props as any).dataRef as T;
+  //     const dropId = option.dropNode.props._key!;
+  //     const currentDropData: Parameters<BlockTreeProps<T>['allowDrop']>[0] = {
+  //       dragNode: { key: dragNode.current.key },
+  //       dropNode: {
+  //         dataRef: dropData,
+  //         parent: (option.dropNode.props as any).parent,
+  //         key: dropId,
+  //       },
+  //       dropPosition: option.dropPosition,
+  //     };
+  //     const isAllowDrop = allowDrop(currentDropData);
 
-      if (isAllowDrop) {
-        return true;
-      }
+  //     if (isAllowDrop) {
+  //       return true;
+  //     }
 
-      return false;
-    },
-    [allowDrop]
-  );
+  //     return false;
+  //   },
+  //   [allowDrop]
+  // );
 
-  const onDrop = useCallback(
-    (info: {
-      e: React.DragEvent<HTMLSpanElement>;
-      dragNode: NodeInstance | null;
-      dropNode: NodeInstance | null;
-      dropPosition: number;
-    }) => {
-      const { dropNode, dropPosition, e } = info;
-      e.dataTransfer.dropEffect = 'move';
-      if (!dragNode.current || !dropNode) return;
+  // const onDrop = useCallback(
+  //   (info: {
+  //     e: React.DragEvent<HTMLSpanElement>;
+  //     dragNode: TreeItem  | null;
+  //     dropNode: TreeItem  | null;
+  //     dropPosition: number;
+  //   }) => {
+  //     const { dropNode, dropPosition, e } = info;
+  //     e.dataTransfer.dropEffect = 'move';
+  //     if (!dragNode.current || !dropNode) return;
 
-      const dropData = (dropNode.props as any).dataRef as T;
-      const currentDropData: Parameters<BlockTreeProps<T>['onDrop']>[0] = {
-        dragNode: dragNode.current,
-        dropNode: {
-          dataRef: dropData,
-          parent: (dropNode.props as any).parent,
-          key: dropNode.props._key as string,
-          parentKey: dropNode.props.parentKey as string,
-        },
-        dropPosition,
-      };
-      propsDrop(currentDropData);
-    },
-    [propsDrop]
-  );
+  //     const dropData = (dropNode.props as any).dataRef as T;
+  //     const currentDropData: Parameters<BlockTreeProps<T>['onDrop']>[0] = {
+  //       dragNode: dragNode.current,
+  //       dropNode: {
+  //         dataRef: dropData,
+  //         parent: (dropNode.props as any).parent,
+  //         key: dropNode.props._key as string,
+  //         parentKey: dropNode.props.parentKey as string,
+  //       },
+  //       dropPosition,
+  //     };
+  //     propsDrop(currentDropData);
+  //   },
+  //   [propsDrop]
+  // );
 
-  const renderTitle: TreeProps['renderTitle'] = useCallback(
-    (nodeData) => {
-      return (
-        <div
-          style={{ display: 'inline-flex', width: '100%' }}
-          onContextMenu={(ev) => onContextMenu && onContextMenu(nodeData, ev)}
-        >
-          {propsRenderTitle(nodeData)}
-        </div>
-      );
-    },
-    [onContextMenu, propsRenderTitle]
-  );
+  // const renderTitle: TreeProps['renderTitle'] = useCallback(
+  //   (nodeData) => {
+  //     return (
+  //       <div
+  //         style={{ display: 'inline-flex', width: '100%' }}
+  //         onContextMenu={(ev) => onContextMenu && onContextMenu(nodeData, ev)}
+  //       >
+  //         {propsRenderTitle(nodeData)}
+  //       </div>
+  //     );
+  //   },
+  //   [onContextMenu, propsRenderTitle]
+  // );
 
-  const onDragEnd = useCallback(() => {
-    dragNode.current = null;
-    propsDragEnd?.();
-  }, [propsDragEnd]);
+  // const onDragEnd = useCallback(() => {
+  //   dragNode.current = null;
+  //   propsDragEnd?.();
+  // }, [propsDragEnd]);
 
-  const onSelect: TreeProps['onSelect'] = useCallback(
-    (selectedKeys) => {
-      propsSelect(selectedKeys[0]);
-    },
-    [propsSelect]
-  );
+  // const onSelect: TreeProps['onSelect'] = useCallback(
+  //   (selectedKeys) => {
+  //     propsSelect(selectedKeys[0]);
+  //   },
+  //   [propsSelect]
+  // );
 
   useEffect(() => {
     if (blockTreeRef) {
@@ -211,8 +206,8 @@ export function BlockTree<T extends TreeNode<T>>(props: BlockTreeProps<T>) {
   return useMemo(
     () => (
       <div ref={setBlockTreeRef} onMouseLeave={props.onMouseLeave}>
-        <CacheTree
-          selectedKeys={selectedKeys}
+        {/* <CacheTree
+          // selectedKeys={selectedKeys}
           expandedKeys={expandedKeys}
           onExpand={onExpand}
           draggable
@@ -221,43 +216,43 @@ export function BlockTree<T extends TreeNode<T>>(props: BlockTreeProps<T>) {
           blockNode
           fieldNames={fileNames}
           onDragEnd={onDragEnd}
-          onDragStart={onDragStart}
-          onDrop={onDrop}
-          allowDrop={onDragMove}
+          // onDragStart={onDragStart}
+          // onDrop={onDrop}
+          // allowDrop={onDragMove}
           onSelect={onSelect}
           renderTitle={renderTitle}
-        />
+        /> */}
       </div>
     ),
     [
-      treeData,
-      props.onMouseLeave,
-      expandedKeys,
-      selectedKeys,
-      onExpand,
-      onDragEnd,
-      onDragStart,
-      onDrop,
-      onDragMove,
-      onSelect,
-      renderTitle,
+      // treeData,
+      // props.onMouseLeave,
+      // expandedKeys,
+      // selectedKeys,
+      // onExpand,
+      // // onDragEnd,
+      // // onDragStart,
+      // // onDrop,
+      // // onDragMove,
+      // onSelect,
+      // renderTitle,
     ]
   );
 }
 
 const cacheTreeDebounceCallback = debounce(
-  (data: TreeProps, setCacheProps: (s: TreeProps) => void) => {
+  (data: TreeItemProps, setCacheProps: (s: TreeItemProps) => void) => {
     setCacheProps(data);
   },
   300
 );
 
-function CacheTree(props: TreeProps) {
+function CacheTree(props: TreeItemProps) {
   const [cacheProps, setCacheProps] = useState(props);
   const lastProps = useRef(props);
 
   useEffect(() => {
-    if (lastProps.current.treeData !== props.treeData) {
+    if (lastProps.current !== props) {
       lastProps.current = props;
       cacheTreeDebounceCallback(props, setCacheProps);
       return () => {
@@ -269,5 +264,5 @@ function CacheTree(props: TreeProps) {
     }
   }, [props]);
 
-  return useMemo(() => <Tree {...cacheProps} />, [cacheProps]);
+  return useMemo(() => <TreeItem {...cacheProps} />, [cacheProps]);
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Padding } from '../../attributes/Padding';
 import { Border } from '../../attributes/Border';
 import { BackgroundColor } from '../../attributes/BackgroundColor';
@@ -14,131 +14,220 @@ import { FontFamily } from '../../attributes/FontFamily';
 import { TextDecoration } from '../../attributes/TextDecoration';
 import { LineHeight } from '../../attributes/LineHeight';
 import { LetterSpacing } from '../../attributes/LetterSpacing';
-import { Collapse, Grid, Popover, Space } from '@arco-design/web-react';
-import { TextField } from '../../../../components/Form';
+import { InputField } from '../../../../components/Form';
 import { IconFont, useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { AttributesPanelWrapper } from '../../attributes/AttributesPanelWrapper';
 import { MergeTags } from '../../attributes';
 import { useField } from 'react-final-form';
-import { Button as ArcoButton } from '@arco-design/web-react';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, Switch, Popover, IconButton } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Button() {
   const { focusIdx } = useFocusIdx();
   const { input } = useField(`${focusIdx}.data.value.content`, {
     parse: (v) => v,
   });
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   const { mergeTags } = useEditorProps();
 
   return (
     <AttributesPanelWrapper>
-      <CollapseWrapper defaultActiveKey={['-1', '0', '1', '2', '3']}>
-        <Collapse.Item name='-1' header='Setting'>
-          <Space direction='vertical'>
-            <TextField
+      <CollapseWrapper>
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="setting-content"
+            id="setting-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <InputField
               label={(
-                <Space>
+                <Grid>
                   <span>Content</span>
                   {mergeTags && (
+                    <>
                     <Popover
-                      trigger='click'
-                      content={(
-                        <MergeTags
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      }}
+                    >
+                    <MergeTags
                           value={input.value}
                           onChange={input.onChange}
                         />
-                      )}
-                    >
-                      <ArcoButton
-                        type='text'
-                        icon={<IconFont iconName='icon-merge-tags' />}
-                      />
                     </Popover>
+                    <IconButton  onClick={handleClick}>
+                        <IconFont iconName='icon-merge-tags' />
+                    </IconButton>
+                    </>
                   )}
-                </Space>
+                </Grid>
               )}
               name={`${focusIdx}.data.value.content`}
             />
             <Link />
-          </Space>
-        </Collapse.Item>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Dimension-content"
+            id="Dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <Grid>
+              <Grid item>
                 <Width />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontWeight />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
             <Padding title='Padding' attributeName='padding' />
             <Padding title='Inner padding' attributeName='inner-padding' />
-          </Space>
-        </Collapse.Item>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='1' header='Color'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Color-content"
+            id="Color-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Color</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <Grid>
+              <Grid item>
                 <Color title='Text color' />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <BackgroundColor title='Button color' />
-              </Grid.Col>
-              <Grid.Col span={11}>
+              </Grid>
+              <Grid item>
                 <ContainerBackgroundColor title='Background color' />
-              </Grid.Col>
-            </Grid.Row>
-          </Space>
-        </Collapse.Item>
+              </Grid>
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='2' header='Typography'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Typography-content"
+            id="Typography-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Typography</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
+            <Grid>
+              <Grid item>
                 <FontFamily />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <FontSize />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <FontWeight />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <LineHeight />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
 
-            <Grid.Row>
-              <Grid.Col span={11}>
+            <Grid>
+              <Grid item>
                 <TextDecoration />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <LetterSpacing />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+            </Grid>
             <Align />
 
             <FontStyle />
-          </Space>
-        </Collapse.Item>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='3' header='Border'>
-          <Border />
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="border-content"
+            id="border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Border />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

@@ -1,35 +1,34 @@
-import { merge } from 'lodash';
 import React from 'react';
-import { Stack } from 'easy-email-editor';
-import {
-  Checkbox,
-  CheckboxGroupProps as ArcoCheckboxGroupProps,
-} from '@arco-design/web-react';
+import {Checkbox, FormGroup, FormControlLabel} from '@mui/material';
+import { xor } from 'lodash';
 
-export interface CheckboxGroupProps extends ArcoCheckboxGroupProps<any> {
+export interface CheckboxGroupProps {
   options: Array<{ value: string; label: React.ReactNode; }>;
   onChange?: (e: any[]) => void;
-  value?: ArcoCheckboxGroupProps<any>['value'];
-  style?: Partial<React.CSSProperties>;
-  checkboxStyle?: Partial<React.CSSProperties>;
+  value?: string[];
   vertical?: boolean;
+  name: string;
 }
 
-export function CheckBoxGroup(props: CheckboxGroupProps) {
-  const { vertical = false, ...rest } = props;
-  return (
-    <Checkbox.Group
-      style={merge({ width: '100%' }, rest.style)}
-      value={rest.value}
-      onChange={rest.onChange}
-    >
-      <Stack vertical={vertical} spacing='extraTight'>
-        {rest.options.map((item, index) => (
-          <Checkbox style={rest.checkboxStyle} key={index} value={item.value}>
-            {item.label}
-          </Checkbox>
-        ))}
-      </Stack>
-    </Checkbox.Group>
-  );
+export function CheckboxGroup(props: CheckboxGroupProps) {
+  const { vertical, value, onChange, name, ...rest } = props;
+  const [values, setValues] = React.useState(value ?? [] );
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let val = [...values];
+    if(event.target.checked)
+      val.push(event.target.value);
+    else
+    val = xor(val, [event.target.value]);
+
+    setValues(val);
+    onChange?.(val);
+  };
+
+  return <FormGroup row={!vertical}>
+    {rest.options.map((item, index) => {
+      const checked = values.findIndex(x => x == item.value) >= 0;
+      return (<FormControlLabel key={index} value={item.value} control={<Checkbox name={name} defaultChecked={checked} onChange={handleChange} />} label={item.label} />);
+    })}
+  </FormGroup>
 }

@@ -6,16 +6,16 @@ import {
   InputWithUnitField,
   RadioGroupField,
   SelectField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
-import { IconLink } from '@arco-design/web-react/icon';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { Stack, useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 import { ICarousel } from 'easy-email-core';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid, InputAdornment } from '@mui/material';
+import { ExpandMore, Link } from "@mui/icons-material";
 
 const options = [
   {
@@ -32,9 +32,20 @@ export function Carousel() {
   const { focusIdx } = useFocusIdx();
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2', '3', '4']}>
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
+      <CollapseWrapper>
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Dimension-content"
+            id="Dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid direction='column'>
             <InputWithUnitField
               label='Thumbnail width'
               name={`${focusIdx}.attributes.tb-width`}
@@ -49,16 +60,30 @@ export function Carousel() {
               inline
             />
             <Align inline />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='4' contentStyle={{ padding: 0 }} header='Images'>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Images-content"
+            id="Images-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Images</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack vertical spacing='tight'>
             <EditTabField
               tabPosition='top'
               name={`${focusIdx}.data.value.images`}
               label=''
               labelHidden
-              renderItem={(item, index) => (
+              renderItem={(item: any, index: number) => (
                 <CarouselImage item={item} index={index} />
               )}
               additionItem={{
@@ -67,71 +92,105 @@ export function Carousel() {
               }}
             />
           </Stack>
-        </Collapse.Item>
-        <Collapse.Item name='3' header='Icon'>
-          <Grid.Row>
-            <Grid.Col span={11}>
-              <TextField
+          </AccordionDetails>
+        </Accordion>
+
+<Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Icon-content"
+            id="Icon-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Icon</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid>
+            <Grid item>
+              <InputField
                 label='Left icon'
                 name={`${focusIdx}.attributes.left-icon`}
               />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11}>
-              <TextField
+            </Grid>
+            <Grid item>
+              <InputField
                 label='Right icon'
                 name={`${focusIdx}.attributes.right-icon`}
               />
-            </Grid.Col>
-          </Grid.Row>
+            </Grid>
+          </Grid>
 
-          <Grid.Row>
-            <Grid.Col span={11}>
-              <InputWithUnitField
+          <Grid>
+            <InputWithUnitField
                 label='Icon width'
                 name={`${focusIdx}.attributes.icon-width`}
               />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11} />
-          </Grid.Row>
-        </Collapse.Item>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='1' header='Border'>
-          <Grid.Row>
-            <Grid.Col span={11}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Border-content"
+            id="Border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Grid>
+            <Grid item>
               <ColorPickerField
                 label='Hovered border'
                 name={`${focusIdx}.attributes.tb-hover-border-color`}
                 alignment='center'
               />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11}>
+            </Grid>
+            <Grid item>
               <ColorPickerField
                 label='Selected Border'
                 name={`${focusIdx}.attributes.tb-selected-border-color`}
                 alignment='center'
               />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col span={11}>
-              <TextField
+            </Grid>
+          </Grid>
+          <Grid>
+            <Grid item>
+              <InputField
                 label='Border of the thumbnails'
                 name={`${focusIdx}.attributes.tb-border`}
               />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11}>
-              <TextField
+            </Grid>
+            <Grid item>
+              <InputField
                 label='Border radius of the thumbnails'
                 name={`${focusIdx}.attributes.tb-border-radius`}
               />
-            </Grid.Col>
-          </Grid.Row>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+            </Grid>
+          </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );
@@ -147,7 +206,7 @@ function CarouselImage({
   const { focusIdx } = useFocusIdx();
   const { onUploadImage } = useEditorProps();
   return (
-    <Space direction='vertical'>
+    <Grid direction='column'>
       <ImageUploaderField
         label='Image'
         labelHidden
@@ -155,15 +214,21 @@ function CarouselImage({
         helpText='The image suffix should be .jpg, jpeg, png, gif, etc. Otherwise, the picture may not be displayed normally.'
         uploadHandler={onUploadImage}
       />
-      <Grid.Row>
-        <Grid.Col span={11}>
-          <TextField
-            prefix={<IconLink />}
+      <Grid>
+        <Grid item>
+          <InputField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Link />
+                </InputAdornment>
+              ),
+            }}
             label='Url'
             name={`${focusIdx}.data.value.images.[${index}].href`}
           />
-        </Grid.Col>
-        <Grid.Col offset={1} span={11}>
+        </Grid>
+        <Grid item>
           <SelectField
             label='Target'
             name={`${focusIdx}.data.value.images.[${index}].target`}
@@ -178,13 +243,13 @@ function CarouselImage({
               },
             ]}
           />
-        </Grid.Col>
-      </Grid.Row>
+        </Grid>
+      </Grid>
 
-      <TextField
+      <InputField
         label='Title'
         name={`${focusIdx}.data.value.image.[${index}].title`}
       />
-    </Space>
+    </Grid>
   );
 }

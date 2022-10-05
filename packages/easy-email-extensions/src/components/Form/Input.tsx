@@ -1,10 +1,7 @@
-import {
-  Input as ArcoInput,
-  InputProps as ArcoInputProps,
-} from '@arco-design/web-react';
 import React, { useCallback } from 'react';
+import { TextField, TextFieldProps } from '@mui/material';
 
-export interface InputProps extends Omit<ArcoInputProps, 'onChange'> {
+export interface InputProps extends Omit<TextFieldProps, 'onChange'> {
   quickchange?: boolean;
   value: string;
   onChange: (val: string) => void;
@@ -56,9 +53,9 @@ export function Input(props: InputProps) {
   );
 
   return (
-    <ArcoInput
+    <TextField
       {...{ ...props, quickchange: undefined }}
-      onChange={(value) => onChange(value)}
+      onChange={(e) => onChange(e.target.value)}
       onKeyDown={onKeyDown}
     />
   );

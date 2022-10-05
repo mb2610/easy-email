@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
@@ -9,36 +8,84 @@ import { Background } from '@extensions/AttributePanel/components/attributes/Bac
 import { Border } from '@extensions/AttributePanel/components/attributes/Border';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Column() {
   return (
     <AttributesPanelWrapper>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={2}>
+              <Grid item>
                 <Width />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <VerticalAlign />
-              </Grid.Col>
-            </Grid.Row>
+              </Grid>
+              <Padding />
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-            <Padding />
-          </Space>
-        </Collapse.Item>
-        <Collapse.Item name='1' header='Background'>
-          <Background />
-        </Collapse.Item>
-        <Collapse.Item name='2' header='Border'>
-          <Border />
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="background-content"
+            id="background-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Background</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Background />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="border-content"
+            id="border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Border />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

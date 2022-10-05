@@ -1,56 +1,54 @@
-import { Layout, Tabs } from '@arco-design/web-react';
 import { useEditorProps } from 'easy-email-editor';
 import React from 'react';
 import { Blocks } from './Blocks';
 import { BlockLayer } from '@extensions/BlockLayer';
 import { FullHeightOverlayScrollbars } from '@extensions/components/FullHeightOverlayScrollbars';
-import styles from './index.module.scss';
 import { ConfigurationDrawer } from './ConfigurationDrawer';
 import { useExtensionProps } from '@extensions/components/Providers/ExtensionProvider';
-
-const TabPane = Tabs.TabPane;
+import { Box, Tab } from '@mui/material'
+import { TabContext, TabList, TabPanel } from "@mui/lab"
 
 export function EditPanel() {
   const { height } = useEditorProps();
   const { compact = true } = useExtensionProps();
+  const [value, setValue] = React.useState<string>('1');
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   return (
-    <Layout.Sider
-      className={styles.blocksPanel}
-      style={{ paddingRight: 0, minWidth: 360 }}
-      // collapsed={collapsed}
-      collapsible
-      trigger={null}
-      breakpoint='xl'
-      collapsedWidth={60}
-      width={360}
+    <Box
+      sx={{
+        minWidth: '360px',
+        width: '360px',
+        border: 1,
+        position: 'relative'
+      }}
     >
-      <Tabs
-        defaultActiveTab='2'
-        style={{ width: '100%', padding: 0 }}
-        renderTabHeader={(_, DefaultHeader) => (
-          <div className={styles.largeTabsHeader}>
-            <DefaultHeader />
-          </div>
-        )}
-      >
-        <TabPane key='2' title='Block'>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="Configurator Panel">
+            <Tab label="Block" value="1" />
+            <Tab label="Layer" value="2" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
           <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
-            <Blocks />
-          </FullHeightOverlayScrollbars>
-        </TabPane>
-
-        <TabPane key='1' title='Layer'>
+              <Blocks />
+            </FullHeightOverlayScrollbars>
+        </TabPanel>
+        <TabPanel value="2">
           <FullHeightOverlayScrollbars height={`calc(${height} - 60px)`}>
             <div style={{ padding: 20 }}>
-              <BlockLayer />
-            </div>
-          </FullHeightOverlayScrollbars>
-        </TabPane>
-      </Tabs>
+                <BlockLayer />
+              </div>
+            </FullHeightOverlayScrollbars>
+        </TabPanel>
+      </TabContext>
+
       {!compact && (
         <ConfigurationDrawer height={height} compact={Boolean(compact)} />
       )}
-    </Layout.Sider>
+    </Box>
   );
 }

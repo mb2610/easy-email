@@ -1,18 +1,19 @@
 import React from 'react';
-import { Tooltip, TooltipProps } from '@arco-design/web-react';
-import { IconQuestionCircle } from '@arco-design/web-react/icon';
+import { IconButton, Tooltip, TooltipProps } from '@mui/material';
+import { HelpRounded } from '@mui/icons-material';
 
-export function Help(
-  props: TooltipProps &
-    Partial<{ style: Partial<React.CSSProperties> }> & {
-      title: React.ReactNode;
-    }
-) {
+export interface HelpProps extends Omit<TooltipProps, 'children'> {
+  // Partial<{ style: Partial<React.CSSProperties> }> & {
+  //   title: React.ReactNode;
+  // }
+}
+
+export function Help(props: HelpProps) {
   return (
-    <Tooltip {...{ ...props, style: undefined }} content={props.title}>
-      <span style={{ cursor: 'pointer' }}>
-        <IconQuestionCircle style={props.style} />
-      </span>
+    <Tooltip {...props}>
+      <IconButton>
+        <HelpRounded />
+      </IconButton>
     </Tooltip>
   );
 }

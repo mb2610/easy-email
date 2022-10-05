@@ -1,8 +1,8 @@
-import { IconEye, IconEyeInvisible } from '@arco-design/web-react/icon';
 import React, { useCallback } from 'react';
-import { Stack, TextStyle, useBlock, useEditorProps } from 'easy-email-editor';
-import { MergeTags } from '../MergeTags';
+import { Stack, TextStyle, useBlock } from 'easy-email-editor';
 import { BasicType, BlockManager } from 'easy-email-core';
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 
 export interface AttributesPanelWrapper {
   style?: React.CSSProperties;
@@ -77,14 +77,12 @@ function EyeIcon() {
   if (focusBlock.type === BasicType.PAGE) return null;
 
   return focusBlock.data.hidden ? (
-    <IconEyeInvisible
-      style={{ cursor: 'pointer', fontSize: 18 }}
-      onClick={onToggleVisible}
-    />
+    <IconButton color="primary" disabled onClick={onToggleVisible}>
+      <VisibilityOff />
+    </IconButton>
   ) : (
-    <IconEye
-      style={{ cursor: 'pointer', fontSize: 18 }}
-      onClick={onToggleVisible}
-    />
+    <IconButton color="primary" onClick={onToggleVisible}>
+      <Visibility />
+    </IconButton>
   );
 }

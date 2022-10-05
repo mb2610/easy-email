@@ -2,16 +2,15 @@ import React from 'react';
 import {
   ColorPickerField,
   InputWithUnitField,
-  SwitchField,
   TextAreaField,
-  TextField,
+  InputField
 } from '@extensions/components/Form';
-import { Help } from '@extensions/AttributePanel/components/UI/Help';
 import { AddFont } from '@extensions/components/Form/AddFont';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
-import { Stack, TextStyle, useFocusIdx } from 'easy-email-editor';
+import { Stack, useFocusIdx } from 'easy-email-editor';
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
 import { FontFamily } from '../../attributes/FontFamily';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Page() {
   const { focusIdx } = useFocusIdx();
@@ -20,91 +19,111 @@ export function Page() {
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
       <Stack.Item fill>
-        <Collapse defaultActiveKey={['0', '1']}>
-          <Collapse.Item name='0' header='Email Setting'>
-            <Space direction='vertical'>
-              <TextField label='Subject' name={'subject'} inline />
-              <TextField label='SubTitle' name={'subTitle'} inline />
-              <InputWithUnitField
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="page-content"
+            id="page-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Page Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={4}>
+              <InputField label='Name' name={'subject'} inline disabled />
+              <InputWithUnitField disabled
                 label='Width'
                 name={`${focusIdx}.attributes.width`}
                 inline
               />
-              <InputWithUnitField
+              <InputWithUnitField disabled
                 label='Breakpoint'
                 helpText='Allows you to control on which breakpoint the layout should go desktop/mobile.'
                 name={`${focusIdx}.data.value.breakpoint`}
                 inline
               />
-            </Space>
-          </Collapse.Item>
-          <Collapse.Item name='1' header='Theme Setting'>
-            <Stack vertical spacing='tight'>
-              <Grid.Row>
-                <Grid.Col span={11}>
-                  <FontFamily name={`${focusIdx}.data.value.font-family`} />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="theme-content"
+            id="theme-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Theme Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={1}>
+              <Grid item direction='row' spacing={1}>
+                <Grid sm={6}>
+                  <FontFamily name={`${focusIdx}.data.value.font-family`} disabled />
+                </Grid>
+                <Grid sm={11}>
                   <InputWithUnitField
-                    label='Font size'
+                    label='Font size' disabled
                     name={`${focusIdx}.data.value.font-size`}
                   />
-                </Grid.Col>
-              </Grid.Row>
+                </Grid>
+              </Grid>
 
-              <Grid.Row>
-                <Grid.Col span={11}>
+              <Grid item direction='row' spacing={1}>
+                <Grid sm={6}>
                   <InputWithUnitField
                     label='Line height'
-                    unitOptions='percent'
+                    unitOptions='percent' disabled
                     name={`${focusIdx}.data.value.line-height`}
                   />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
+                </Grid>
+                <Grid sm={6}>
                   <InputWithUnitField
                     label='Font weight'
-                    unitOptions='percent'
+                    unitOptions='percent' disabled
                     name={`${focusIdx}.data.value.font-weight`}
                   />
-                </Grid.Col>
-              </Grid.Row>
+                </Grid>
+              </Grid>
 
-              <Grid.Row>
-                <Grid.Col span={11}>
+              <Grid item direction='row' spacing={1}>
+                <Grid sm={6}>
                   <ColorPickerField
-                    label='Text color'
+                    label='Text color' disabled
                     name={`${focusIdx}.data.value.text-color`}
                   />
-                </Grid.Col>
-                <Grid.Col offset={1} span={11}>
+                </Grid>
+                <Grid sm={6}>
                   <ColorPickerField
-                    label='Background'
+                    label='Background' disabled
                     name={`${focusIdx}.attributes.background-color`}
                   />
-                </Grid.Col>
-              </Grid.Row>
+                </Grid>
+              </Grid>
 
-              <Grid.Row>
+              <Grid item>
                 <ColorPickerField
-                  label='Content background'
+                  label='Content background' disabled
                   name={`${focusIdx}.data.value.content-background-color`}
                 />
-
-              </Grid.Row>
+              </Grid>
 
               <TextAreaField
                 autoSize
-                label='User style'
+                label='User style' disabled
                 name={`${focusIdx}.data.value.user-style.content`}
               />
-              <Stack.Item />
-              <Stack.Item />
+
               <AddFont />
-              <Stack.Item />
-              <Stack.Item />
-            </Stack>
-          </Collapse.Item>
-        </Collapse>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+
       </Stack.Item>
     </AttributesPanelWrapper>
   );

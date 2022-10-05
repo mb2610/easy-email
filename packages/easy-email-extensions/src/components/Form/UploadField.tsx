@@ -1,7 +1,7 @@
 import { Uploader } from '@extensions/AttributePanel/utils/Uploader';
-import { Input } from '@arco-design/web-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { IconUpload, IconLoading } from '@arco-design/web-react/icon';
+import { TextField, InputAdornment, CircularProgress  } from '@mui/material';
+import { Upload  } from '@mui/icons-material';
 
 export interface UploadFieldProps {
   onChange: (val: string) => void;
@@ -41,10 +41,16 @@ export function UploadField(props: UploadFieldProps) {
   };
 
   return (
-    <Input
-      prefix={loading ? <IconLoading /> : <IconUpload onClick={onClick} />}
+    <TextField
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            loading ? <CircularProgress /> : <Upload onClick={onClick} />
+          </InputAdornment>
+        ),
+      }}
       value={props.value}
-      onChange={inputDisabled ? undefined : (value) => onChange(value)}
+      onChange={inputDisabled ? undefined : (e) => onChange(e.target.value)}
     />
   );
 }

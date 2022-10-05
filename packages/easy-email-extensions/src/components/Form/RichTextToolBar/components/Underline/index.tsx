@@ -1,11 +1,10 @@
-import { PopoverProps, Tooltip } from '@arco-design/web-react';
 import React, { useCallback, useMemo } from 'react';
 import { IconFont } from 'easy-email-editor';
 import { ToolItem } from '../ToolItem';
 import { EMAIL_BLOCK_CLASS_NAME } from 'easy-email-core';
 import { useSelectionRange } from '@extensions/AttributePanel/hooks/useSelectionRange';
 
-export interface LinkProps extends PopoverProps {
+export interface LinkProps {
   currentRange: Range | null | undefined;
   onChange: () => void;
 }
@@ -35,12 +34,6 @@ export function Underline(props: LinkProps) {
   }, [node, onChange, setRangeByElement]);
 
   return (
-    <Tooltip
-      color='#fff'
-      position='tl'
-      content="Underline"
-    >
-      <ToolItem title='Underline' isActive={Boolean(node)} icon={<IconFont iconName='icon-underline' />} onClick={onClick} />
-    </Tooltip>
+    <ToolItem title='Underline' isActive={Boolean(node)} icon={<IconFont iconName='icon-underline' />} onClick={onClick} />
   );
 }

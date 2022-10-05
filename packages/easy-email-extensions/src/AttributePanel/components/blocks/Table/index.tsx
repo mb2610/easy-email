@@ -1,7 +1,5 @@
 import { AttributesPanelWrapper } from '@extensions/AttributePanel';
-import { Collapse, Tooltip } from '@arco-design/web-react';
-import { Button } from '@arco-design/web-react';
-import { IconFont, Stack } from 'easy-email-editor';
+import { Stack } from 'easy-email-editor';
 import React, { useState } from 'react';
 import { Border } from '../../attributes/Border';
 import { Color } from '../../attributes/Color';
@@ -14,6 +12,8 @@ import { TextAlign } from '../../attributes/TextAlign';
 import { Width } from '../../attributes/Width';
 import { HtmlEditor } from '../../UI/HtmlEditor';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Tooltip, IconButton } from '@mui/material';
+import { ExpandMore, HtmlOutlined } from "@mui/icons-material";
 
 export function Table() {
   const [visible, setVisible] = useState(false);
@@ -21,16 +21,26 @@ export function Table() {
   return (
     <AttributesPanelWrapper
       extra={(
-        <Tooltip content='Edit'>
-          <Button
-            onClick={() => setVisible(true)}
-            icon={<IconFont iconName='icon-html' />}
-          />
-        </Tooltip>
+        <Tooltip title="Edit">
+        <IconButton onClick={() => setVisible(true)}>
+          <HtmlOutlined />
+        </IconButton>
+      </Tooltip>
       )}
     >
-      <CollapseWrapper defaultActiveKey={['-1', '0', '1', '2', '3']}>
-        <Collapse.Item name='1' header='Dimension'>
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Dimension-content"
+            id="Dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack>
             <Width />
             <Stack.Item />
@@ -38,22 +48,51 @@ export function Table() {
           <Stack vertical>
             <Padding />
           </Stack>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='2' header='Decoration'>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Decoration-content"
+            id="Decoration-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Decoration</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Color />
           <ContainerBackgroundColor />
           <Border />
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='2' header='Typography'>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="Typography-content"
+            id="Typography-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Typography</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack>
             <FontFamily />
             <FontSize />
           </Stack>
           <FontStyle />
           <TextAlign />
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
+
+
+
+
       </CollapseWrapper>
       <HtmlEditor visible={visible} setVisible={setVisible} />
     </AttributesPanelWrapper>

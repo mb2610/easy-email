@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { IconLoading } from '@arco-design/web-react/icon';
+import { CircularProgress } from '@mui/material';
 
 type LoadingProps = {
   loading: boolean;
@@ -46,7 +46,7 @@ export function Loading({
             justifyContent: 'center',
           }}
         >
-          <IconLoading style={{ fontSize: state.fontSize, color }} />
+          <CircularProgress />
         </div>
       ) : (
         children

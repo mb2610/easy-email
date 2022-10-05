@@ -33,7 +33,6 @@ export interface PropsProviderProps {
   onChangeMergeTag?: (ptah: string, val: any) => any;
   renderMergeTagContent?: (props: {
     onChange: (val: string) => void;
-    isSelect: boolean;
     value: string;
   }) => React.ReactNode;
   enabledMergeTagsBadge?: boolean;

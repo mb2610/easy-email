@@ -8,56 +8,95 @@ import { Width } from '@extensions/AttributePanel/components/attributes/Width';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { Stack } from 'easy-email-editor';
 import { ClassName } from '../../attributes/ClassName';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Divider() {
   return (
     <AttributesPanelWrapper>
-      <CollapseWrapper defaultActiveKey={['-1', '0', '1', '2', '3']}>
-        <Collapse.Item name='1' header='Dimension'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+      <CollapseWrapper>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={2}>
+              <Grid item>
                 <Width unitOptions='percent' />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11} />
-            </Grid.Row>
+              </Grid>
+              <Align />
+              <Padding />
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-            <Align />
-            <Padding />
-          </Space>
-        </Collapse.Item>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="border-content"
+            id="border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack wrap={false} spacing='tight'>
+              <div style={{ width: 50 }}>
+                <BorderWidth />
+              </div>
+              <div style={{ width: 100 }}>
+                <BorderStyle />
+              </div>
+              <div style={{ width: 100 }}>
+                <BorderColor />
+              </div>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='2' header='Border'>
-          <Stack wrap={false} spacing='tight'>
-            <div style={{ width: 50 }}>
-              <BorderWidth />
-            </div>
-            <div style={{ width: 100 }}>
-              <BorderStyle />
-            </div>
-            <div style={{ width: 100 }}>
-              <BorderColor />
-            </div>
-          </Stack>
-        </Collapse.Item>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="background-content"
+            id="background-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Background</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ContainerBackgroundColor />
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='3' header='Background'>
-          <Grid.Row>
-            <Grid.Col span={11}>
-              <ContainerBackgroundColor title='Background' />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11} />
-          </Grid.Row>
-        </Collapse.Item>
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Col span={24}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <ClassName />
-          </Grid.Col>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

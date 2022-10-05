@@ -4,19 +4,15 @@ import { useDispatch } from 'react-redux';
 import template from '@demo/store/template';
 import { useAppSelector } from '@demo/hooks/useAppSelector';
 import { useLoading } from '@demo/hooks/useLoading';
-import { Button, Message, PageHeader, Select } from '@arco-design/web-react';
 import { useQuery } from '@demo/hooks/useQuery';
 import { useHistory } from 'react-router-dom';
 import { cloneDeep, set, isEqual } from 'lodash';
 import { Loading } from '@demo/components/loading';
 import mjml from 'mjml-browser';
 import { copy } from '@demo/utils/clipboard';
-import { useEmailModal } from './components/useEmailModal';
 import services from '@demo/services';
-import { IconGithub, IconMoonFill, IconSunFill } from '@arco-design/web-react/icon';
 import { Liquid } from 'liquidjs';
 import {
-  BlockAvatarWrapper,
   EmailEditor,
   EmailEditorProvider,
   EmailEditorProviderProps,
@@ -32,7 +28,6 @@ import { useCollection } from './components/useCollection';
 import {
   AdvancedType,
   BasicType,
-  getPageIdx,
   IBlockData,
   JsonToMjml,
 } from 'easy-email-core';
@@ -41,22 +36,17 @@ import {
   ExtensionProps,
   StandardLayout,
 } from 'easy-email-extensions';
-import { AutoSaveAndRestoreEmail } from '@demo/components/AutoSaveAndRestoreEmail';
-
-// Register external blocks
-import './components/CustomBlocks';
 
 import 'easy-email-editor/lib/style.css';
 import 'easy-email-extensions/lib/style.css';
-import blueTheme from '@arco-themes/react-easy-email-theme/css/arco.css?inline';
-import purpleTheme from '@arco-themes/react-easy-email-theme-purple/css/arco.css?inline';
-import greenTheme from '@arco-themes/react-easy-email-theme-green/css/arco.css?inline';
 import { useState } from 'react';
 import { testMergeTags } from './testMergeTags';
 import { useMergeTagsModal } from './components/useMergeTagsModal';
 
 import { useWindowSize } from 'react-use';
-import { CustomBlocksType } from './components/CustomBlocks/constants';
+import { AppBar, Button, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Save } from '@mui/icons-material';
 
 const defaultCategories: ExtensionProps['categories'] = [
   {
@@ -136,45 +126,7 @@ const defaultCategories: ExtensionProps['categories'] = [
         payload: [[['25%', '25%', '25%', '25%']]],
       },
     ],
-  },
-  {
-    label: 'Custom',
-    active: true,
-    displayType: 'custom',
-    blocks: [
-      <BlockAvatarWrapper type={CustomBlocksType.PRODUCT_RECOMMENDATION}>
-        <div
-          style={{
-            position: 'relative',
-            border: '1px solid #ccc',
-            marginBottom: 20,
-            width: '80%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
-          <img
-            src={
-              'https://assets.maocanhua.cn/c160738b-db01-4081-89e5-e35bd3a34470-image.png'
-            }
-            style={{
-              maxWidth: '100%',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex: 2,
-            }}
-          />
-        </div>
-      </BlockAvatarWrapper>,
-    ],
-  },
+  }
 ];
 
 const socialIcons = [
@@ -293,8 +245,6 @@ export default function Editor() {
   const { width } = useWindowSize();
 
   const smallScene = width < 1400;
-
-  const { openModal, modal } = useEmailModal();
   const { id, userId } = useQuery();
   const loading = useLoading(template.loadings.fetchById);
   const {
@@ -381,7 +331,7 @@ export default function Editor() {
     ).html;
 
     copy(html);
-    Message.success('Copied to pasteboard!');
+    console.log('Copied to pasteboard!');
   };
 
   const onExportMJML = (values: IEmailTemplate) => {
@@ -394,7 +344,7 @@ export default function Editor() {
 
     copy(html);
     pushEvent({ event: 'MJMLExport', payload: { values, mergeTags } });
-    Message.success('Copied to pasteboard!');
+    console.log('Copied to pasteboard!');
   };
 
   const initialValues: IEmailTemplate | null = useMemo(() => {
@@ -420,7 +370,7 @@ export default function Editor() {
         );
 
         if (!isChanged) {
-          Message.success('Updated success!');
+          console.log('Updated success!');
           form.restart(values);
           return;
         }
@@ -429,7 +379,7 @@ export default function Editor() {
             id: +id,
             template: values,
             success() {
-              Message.success('Updated success!');
+              console.log('Updated success!');
               form.restart(values);
             },
           }),
@@ -439,7 +389,7 @@ export default function Editor() {
           template.actions.create({
             template: values,
             success(id, newTemplate) {
-              Message.success('Saved success!');
+              console.log('Saved success!');
               form.restart(newTemplate);
               history.replace(`/editor?id=${id}`);
             },
@@ -459,12 +409,6 @@ export default function Editor() {
     [],
   );
 
-  const themeStyleText = useMemo(() => {
-    if (theme === 'green') return greenTheme;
-    if (theme === 'purple') return purpleTheme;
-    return blueTheme;
-  }, [theme]);
-
   if (!templateData && loading) {
     return (
       <Loading loading={loading}>
@@ -477,7 +421,6 @@ export default function Editor() {
 
   return (
     <div>
-      <style>{themeStyleText}</style>
       <EmailEditorProvider
         key={id}
         height={'calc(100vh - 65px)'}
@@ -504,78 +447,38 @@ export default function Editor() {
         {({ values }, { submit }) => {
           return (
             <>
-              <PageHeader
-                style={{ background: 'var(--color-bg-2)' }}
-                backIcon
-                title='Edit'
-                onBack={() => history.push('/')}
-                extra={
-                  <Stack alignment='center'>
-                    <Button
-                      onClick={() => setIsDarkMode(v => !v)}
-                      shape='circle'
-                      type='text'
-                      icon={isDarkMode ? <IconMoonFill /> : <IconSunFill />}
-                    ></Button>
+              <AppBar position="fixed">
+                  <Grid>
+                    <Button onClick={() => history.push('/')}>Back</Button>
+                    <Stack alignment='center'>
+                      <Button onClick={openMergeTagsModal}>Update mergeTags</Button>
 
-                    <Select
-                      onChange={onChangeTheme}
-                      value={theme}
-                    >
-                      <Select.Option value='blue'>Blue</Select.Option>
-                      <Select.Option value='green'>Green</Select.Option>
-                      <Select.Option value='purple'>Purple</Select.Option>
-                    </Select>
+                      <Button onClick={() => onExportMJML(values)}>Export MJML</Button>
 
-                    <Button onClick={openMergeTagsModal}>Update mergeTags</Button>
+                      <Button onClick={() => onExportHtml(values)}>Export html</Button>
 
-                    <Button onClick={() => onExportMJML(values)}>Export MJML</Button>
-
-                    <Button onClick={() => onExportHtml(values)}>Export html</Button>
-
-                    <Button onClick={() => openModal(values, mergeTags)}>
-                      Send test email
-                    </Button>
-                    <Button
-                      loading={isSubmitting}
-                      type='primary'
-                      onClick={() => submit()}
-                    >
-                      Save
-                    </Button>
-                    <a
-                      target='_blank'
-                      href='https://github.com/m-Ryan/easy-email'
-                      style={{
-                        color: '#000',
-                        fontSize: 28,
-                        width: 33,
-                        height: 33,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: '#fff',
-                        borderRadius: '50%',
-                      }}
-                      onClick={() => pushEvent({ event: 'Github' })}
-                    >
-                      <IconGithub />
-                    </a>
-                  </Stack>
-                }
-              />
+                      <LoadingButton
+                        loading={isSubmitting}
+                        loadingPosition="start"
+                        startIcon={<Save />}
+                        variant="outlined"
+                        onClick={() => submit()}
+                      >
+                        Save
+                      </LoadingButton>
+                    </Stack>
+                  </Grid>
+              </AppBar>
               <StandardLayout
                 compact={!smallScene}
                 categories={defaultCategories}
               >
                 <EmailEditor />
               </StandardLayout>
-              <AutoSaveAndRestoreEmail />
             </>
           );
         }}
       </EmailEditorProvider>
-      {modal}
       {mergeTagsModal}
     </div>
   );

@@ -1,12 +1,10 @@
-import { Card, Space, Tabs, TabsProps, Typography } from '@arco-design/web-react';
-import { IconClose, IconPlus } from '@arco-design/web-react/icon';
-import { classnames } from '@extensions/utils/classnames';
 import { cloneDeep } from 'lodash';
-import React, { useState } from 'react';
-import styles from './index.module.scss';
+import React from 'react';
+import { Box, Tab, IconButton } from '@mui/material'
+import { Delete, Add } from '@mui/icons-material'
+import { TabContext, TabList, TabPanel } from "@mui/lab"
 
-export interface EditGridTabProps<T extends any = any>
-  extends Omit<TabsProps, 'onChange'> {
+export interface EditGridTabProps<T extends any = any> {
   value: Array<T>;
   renderItem: (item: T, index: number) => React.ReactNode;
   onChange: (vals: Array<T>) => any;
@@ -15,41 +13,41 @@ export interface EditGridTabProps<T extends any = any>
 }
 export function EditGridTab<T extends any = any>(props: EditGridTabProps<T>) {
   const { value, additionItem } = props;
+  const [activeTab, setActiveTab] = React.useState<string>('' + value);
 
   const onAdd = (index: number) => {
     let newItem = additionItem || cloneDeep(value[index]);
     value.splice(index + 1, 0, newItem);
+    setActiveTab('' + (index + 1))
     props.onChange([...value]);
   };
 
   const onDelete = (index: number) => {
     props.onChange(value.filter((_, vIndex) => Number(index) !== vIndex));
   };
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setActiveTab(newValue);
+  };
+
   return (
-    <Card
-      bordered={false}
-    >
+    <TabContext value={activeTab}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabList onChange={handleChange} aria-label="Configurator Panel">
+          {(Array.isArray(value) ? value : []).map((_, index) =>  (
+            <Tab key={index} label={(<>
+              <span>{`${props.label || 'Item'} ${index + 1}`}</span>
+              <IconButton onClick={() => onAdd(index)}><Add /></IconButton>
+              <IconButton onClick={() => onDelete(index)}><Delete /></IconButton>
+            </>)} value={index} />
+          ))}
+        </TabList>
+      </Box>
       {(Array.isArray(value) ? value : []).map((item, index) => (
-        <Card.Grid style={{ width: '100%' }} key={index}>
-          <Card title={(
-            <Space>
-              <Typography.Text>
-                Item {index + 1}
-              </Typography.Text>
-
-            </Space>
-          )} extra={(
-            <Space size="large">
-              <IconPlus style={{ color: '#000', cursor: 'pointer' }} onClick={() => onAdd(index)} />
-              <IconClose style={{ color: '#000', cursor: 'pointer' }} onClick={() => onDelete(index)} />
-            </Space>
-          )}
-          >
+        <TabPanel key={index} value={'' + index} sx={{ height: 500, overflow: 'auto' }}>
             {props.renderItem(item, index)}
-          </Card>
-        </Card.Grid>
+        </TabPanel>
       ))}
-    </Card>
+  </TabContext>
   );
-
 }

@@ -165,7 +165,6 @@ export function Tools(props: ToolsProps) {
         <IconFontColor
           selectionRange={selectionRange}
           execCommand={execCommand}
-          getPopoverMountNode={getPopoverMountNode}
         />
         <div className='easy-email-extensions-divider' />
         <IconBgColor

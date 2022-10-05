@@ -27,7 +27,6 @@ export default defineConfig({
       '@demo': path.resolve(__dirname, './src'),
       '@extensions': path.resolve('../packages/easy-email-extensions/src'),
       '@core': path.resolve('../packages/easy-email-core/src'),
-      '@arco-themes': path.resolve('./node_modules/@arco-themes'),
       '@': path.resolve('../packages/easy-email-editor/src'),
       'easy-email-core': path.resolve(
         '../packages/easy-email-core/src/index.tsx'
@@ -37,16 +36,13 @@ export default defineConfig({
       ),
       'easy-email-extensions': path.resolve(
         '../packages/easy-email-extensions/src/index.tsx'
-      ),
-      '@arco-design/web-react/dist/css/arco.css': path.resolve(
-        './node_modules/@arco-design/web-react/dist/css/arco.css'
-      ),
+      )
     },
   },
 
   define: {},
   esbuild: {
-    jsxInject: 'import "@arco-design/web-react/dist/css/arco.css";',
+    jsxInject: '',
   },
   build: {
     minify: 'terser',

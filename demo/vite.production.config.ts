@@ -55,24 +55,7 @@ export default defineConfig({
   },
   plugins: [
     styleImport({
-      libs: [
-        // Dynamic import @arco-design styles
-        {
-          libraryName: '@arco-design/web-react',
-          libraryNameChangeCase: 'pascalCase',
-          esModule: true,
-          resolveStyle: (name) =>
-            `@arco-design/web-react/es/${name}/style/index`,
-        },
-        {
-          libraryName: '@arco-design/web-react/icon',
-          libraryNameChangeCase: 'pascalCase',
-          resolveStyle: (name) =>
-            `@arco-design/web-react/icon/react-icon/${name}`,
-          resolveComponent: (name) =>
-            `@arco-design/web-react/icon/react-icon/${name}`,
-        },
-      ],
+      libs: [ ],
     }),
     injectHtml({
       data: {

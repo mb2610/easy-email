@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Padding } from '@extensions/AttributePanel/components/attributes/Padding';
 import {
   ColorPickerField,
   ImageUploaderField,
-  TextField,
+  InputField,
 } from '@extensions/components/Form';
 import { Width } from '@extensions/AttributePanel/components/attributes/Width';
 import { Height } from '@extensions/AttributePanel/components/attributes/Height';
@@ -11,10 +11,12 @@ import { Link } from '@extensions/AttributePanel/components/attributes/Link';
 import { Align } from '@extensions/AttributePanel/components/attributes/Align';
 
 import { AttributesPanelWrapper } from '@extensions/AttributePanel/components/attributes/AttributesPanelWrapper';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
 import { Border } from '@extensions/AttributePanel/components/attributes/Border';
 import { Stack, useEditorProps, useFocusIdx } from 'easy-email-editor';
 import { CollapseWrapper } from '../../attributes/CollapseWrapper';
+import { ClassName } from '../../attributes/ClassName';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
 
 export function Image() {
   const { focusIdx } = useFocusIdx();
@@ -22,8 +24,20 @@ export function Image() {
 
   return (
     <AttributesPanelWrapper style={{ padding: 0 }}>
-      <CollapseWrapper defaultActiveKey={['0', '1', '2', '3', '4']}>
-        <Collapse.Item name='1' header='Setting'>
+      <CollapseWrapper>
+
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="setting-content"
+            id="setting-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
           <Stack vertical spacing='tight'>
             <ImageUploaderField
               label='src'
@@ -39,54 +53,99 @@ export function Image() {
               alignment='center'
             />
           </Stack>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='0' header='Dimension'>
-          <Space direction='vertical'>
-            <Grid.Row>
-              <Grid.Col span={11}>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="dimension-content"
+            id="dimension-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Dimension</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid direction='column' spacing={2}>
+              <Grid item>
                 <Width />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+              </Grid>
+              <Grid item>
                 <Height />
-              </Grid.Col>
-            </Grid.Row>
-
-            <Padding />
-            <Grid.Row>
-              <Grid.Col span={24}>
+              </Grid>
+              <Grid item>
+                <Padding />
+              </Grid>
+              <Grid item>
                 <Align />
-              </Grid.Col>
-            </Grid.Row>
-          </Space>
-        </Collapse.Item>
+              </Grid>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='2' header='Link'>
-          <Stack vertical spacing='tight'>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="link-content"
+            id="link-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Link</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <Link />
-          </Stack>
-        </Collapse.Item>
+          </AccordionDetails>
+        </Accordion>
 
-        <Collapse.Item name='3' header='Border'>
-          <Border />
-        </Collapse.Item>
 
-        <Collapse.Item name='4' header='Extra'>
-          <Grid.Row>
-            <Grid.Col span={11}>
-              <TextField label='title' name={`${focusIdx}.attributes.title`} />
-            </Grid.Col>
-            <Grid.Col offset={1} span={11}>
-              <TextField label='alt' name={`${focusIdx}.attributes.alt`} />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Col span={24}>
-            <TextField
-              label='class name'
-              name={`${focusIdx}.attributes.css-class`}
-            />
-          </Grid.Col>
-        </Collapse.Item>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="border-content"
+            id="border-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Border</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Border />
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="extra-content"
+            id="extra-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Extra</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+              <Grid>
+
+          <Grid>
+            <Grid item>
+              <InputField label='title' name={`${focusIdx}.attributes.title`} />
+            </Grid>
+            <Grid item>
+              <InputField label='alt' name={`${focusIdx}.attributes.alt`} />
+            </Grid>
+          </Grid>
+              </Grid>
+            <ClassName />
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
       </CollapseWrapper>
     </AttributesPanelWrapper>
   );

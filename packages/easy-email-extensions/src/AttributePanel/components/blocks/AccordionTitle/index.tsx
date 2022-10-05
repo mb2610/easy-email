@@ -9,49 +9,42 @@ import { FontWeight } from '../../attributes/FontWeight';
 import { FontFamily } from '../../attributes/FontFamily';
 import { AttributesPanelWrapper } from '../../attributes/AttributesPanelWrapper';
 import { useFocusIdx } from 'easy-email-editor';
-import { Collapse, Grid, Space } from '@arco-design/web-react';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Grid } from '@mui/material';
+import { ExpandMore } from "@mui/icons-material";
+
 
 export function AccordionTitle() {
   const { focusIdx } = useFocusIdx();
   return (
     <AttributesPanelWrapper>
-      <Collapse defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Item name='0' header='Setting'>
-          <Space direction='vertical'>
-            <TextAreaField
+      <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="setting-content"
+            id="setting-header"
+            sx={{
+              backgroundColor: '#CCC'
+            }}
+          >
+            <Typography>Setting</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid>
+            <TextAreaField 
               label='Content'
               name={`${focusIdx}.data.value.content`}
             />
 
-            <Grid.Row>
-              <Grid.Col span={11}>
-                <Color />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
+            <Color />
                 <BackgroundColor />
-              </Grid.Col>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Col span={11}>
                 <FontSize />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11}>
                 <FontFamily />
-              </Grid.Col>
-            </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Col span={11}>
                 <FontWeight />
-              </Grid.Col>
-              <Grid.Col offset={1} span={11} />
-            </Grid.Row>
-
             <Padding title='Padding' attributeName='padding' />
-          </Space>
-        </Collapse.Item>
-      </Collapse>
+
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
     </AttributesPanelWrapper>
   );
 }
